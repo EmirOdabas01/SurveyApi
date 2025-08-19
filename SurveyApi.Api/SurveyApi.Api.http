@@ -1,0 +1,6 @@
+@SurveyApi.Api_HostAddress = http://localhost:5157
+
+GET {{SurveyApi.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
