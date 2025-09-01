@@ -6,4 +6,12 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\SurveyApi.Application\SurveyApi.Application.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Concretes\" />
+  </ItemGroup>
+
 </Project>
