@@ -9,7 +9,7 @@ namespace SurveyApi.Domain.Entities
 {
     public class Survey
     {
-        public Guid SurveyId { get; set; }
+        public Guid Id { get; set; }
         public required string Name { get; set; }
         public required string Description { get; set; }
         public required Visibility Visibility { get; set; }
@@ -17,5 +17,9 @@ namespace SurveyApi.Domain.Entities
         public DateTime? EndDate { get; set; }
         public int MinResponse { get; set; }
         public int MaxResponse { get; set; }
+        public SurveyStatus SurveyStatus { get; set; }
+        public ICollection<Question> Questions { get; set; }
+        public ICollection<Response> Responses { get; set; } 
+        public User User { get; set; }
     }
 }

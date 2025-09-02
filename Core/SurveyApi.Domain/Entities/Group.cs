@@ -8,6 +8,9 @@ namespace SurveyApi.Domain.Entities
 {
     public class Group
     {
-        public Guid GroupId { get; set; }
+        public Guid Id { get; set; }
+        public required string Name { get; set; }
+        public required string Description { get; set; }
+        public ICollection<User> Users { get; set; }
     }
 }

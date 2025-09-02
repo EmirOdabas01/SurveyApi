@@ -6,14 +6,13 @@ using System.Threading.Tasks;
 
 namespace SurveyApi.Domain.Entities
 {
-    public class User
+    public class Respondent
     {
         public Guid Id { get; set; }
         public required string UserName { get; set; }
         public required string PhoneNumber { get; set; }
         public required string EMail { get; set; }
         public required string PasswordHash { get; set; }
-        public ICollection<Group> Groups { get; set; }
-        public ICollection<Survey> Surveys { get; set; }
+        public ICollection<Response> Responses { get; set; }
     }
 }

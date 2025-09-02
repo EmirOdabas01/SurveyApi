@@ -8,6 +8,8 @@ namespace SurveyApi.Domain.Entities
 {
     public class AnswerOption
     {
-        public Guid AnswerOptionId { get; set; }
+        public Guid Id { get; set; }
+        public QuestionOption QuestionOption { get; set; }
+        public Answer Answer { get; set; }
     }
 }

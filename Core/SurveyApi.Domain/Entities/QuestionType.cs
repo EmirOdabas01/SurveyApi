@@ -9,7 +9,8 @@ namespace SurveyApi.Domain.Entities
 {
     public class QuestionType
     {
-        public Guid QuestionTypeId { get; set; }
+        public Guid Id { get; set; }
         public required QuestType Type { get; set; }
+        public ICollection<Question> Questions { get; set; }
     }
 }

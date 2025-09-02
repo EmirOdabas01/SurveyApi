@@ -8,8 +8,11 @@ namespace SurveyApi.Domain.Entities
 {
     public class Response
     {
-        public Guid ResponseId { get; set; }
+        public Guid Id { get; set; }
         public required DateTime BeginDate { get; set; }
         public DateTime? EndDate { get; set; }
+        public  ICollection<Answer> Answers { get; set; }
+        public  Survey Survey { get; set; }
+        public  Respondent Respondent { get; set; }
     }
 }

@@ -8,7 +8,8 @@ namespace SurveyApi.Domain.Entities
 {
     public class SurveyStatus
     {
-        public Guid SurveyStatusId { get; set; }
+        public Guid Id { get; set; }
         public Status SurveyStats { get; set; }
+        public ICollection<Survey> Surveys { get; set; }
     }
 }
