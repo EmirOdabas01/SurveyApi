@@ -6,13 +6,12 @@ using System.Threading.Tasks;
 
 namespace SurveyApi.Domain.Entities
 {
-    public class Response
+    public class Response : BaseEntity
     {
-        public Guid Id { get; set; }
         public required DateTime BeginDate { get; set; }
         public DateTime? EndDate { get; set; }
         public  ICollection<Answer> Answers { get; set; }
         public  Survey Survey { get; set; }
-        public  Respondent Respondent { get; set; }
+        public  User User { get; set; }
     }
 }

@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace SurveyApi.Domain.Entities
 {
-    public class Survey
+    public class Survey : BaseEntity
     {
-        public Guid Id { get; set; }
         public required string Name { get; set; }
         public required string Description { get; set; }
         public required Visibility Visibility { get; set; }

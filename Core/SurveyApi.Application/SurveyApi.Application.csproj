@@ -7,11 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SurveyApi.Domain\SurveyApi.Domain.csproj" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.8" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Abstraction\" />
+    <ProjectReference Include="..\SurveyApi.Domain\SurveyApi.Domain.csproj" />
   </ItemGroup>
 
 </Project>

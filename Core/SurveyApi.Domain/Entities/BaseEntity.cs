@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace SurveyApi.Domain.Entities
 {
-    public class AnswerOption : BaseEntity
+    public class BaseEntity
     {
-        public QuestionOption QuestionOption { get; set; }
-        public Answer Answer { get; set; }
+        public Guid Id { get; set; }
     }
 }

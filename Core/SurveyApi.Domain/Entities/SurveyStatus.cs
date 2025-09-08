@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 using SurveyApi.Domain.Enums;
 namespace SurveyApi.Domain.Entities
 {
-    public class SurveyStatus
+    public class SurveyStatus : BaseEntity
     {
-        public Guid Id { get; set; }
         public Status SurveyStats { get; set; }
         public ICollection<Survey> Surveys { get; set; }
     }

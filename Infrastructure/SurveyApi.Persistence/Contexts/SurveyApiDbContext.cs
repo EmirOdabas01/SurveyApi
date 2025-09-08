@@ -30,37 +30,37 @@ namespace SurveyApi.Persistence.Contexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<SurveyStatus>()
-                .HasMany(s => s.Surveys)
+                .HasMany(st => st.Surveys)
                 .WithOne(s => s.SurveyStatus)
                 .IsRequired(true)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Survey>()
-                .HasMany(q => q.Questions)
-                .WithOne(s => s.Survey)
+                .HasMany(s => s.Questions)
+                .WithOne(q => q.Survey)
                 .IsRequired(true)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<QuestionType>()
-                 .HasMany(q => q.Questions)
-                 .WithOne(qt => qt.QuestionType)
+                 .HasMany(qt => qt.Questions)
+                 .WithOne(q => q.QuestionType)
                  .IsRequired(true)
                  .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Question>()
-                .HasMany(qo => qo.QuestionOptions)
-                .WithOne(q => q.Question)
+                .HasMany(q => q.QuestionOptions)
+                .WithOne(qo => qo.Question)
                 .IsRequired(true)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<QuestionOption>()
-                .HasMany(a => a.AnswerOptions)
-                .WithOne(q => q.QuestionOption)
+                .HasMany(qo => qo.AnswerOptions)
+                .WithOne(ao => ao.QuestionOption)
                 .IsRequired(true)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<AnswerOption>()
-                .HasOne(a => a.Answer)
+                .HasOne(ao => ao.Answer)
                 .WithMany(a => a.AnswerOptions)
                 .IsRequired(true)
                 .OnDelete(DeleteBehavior.Cascade);
@@ -72,28 +72,28 @@ namespace SurveyApi.Persistence.Contexts
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Response>()
-                .HasMany(a => a.Answers)
+                .HasMany(r => r.Answers)
                 .WithOne(a => a.Response)
                 .IsRequired(true)
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Survey>()
-                .HasMany(r => r.Responses)
+                .HasMany(s => s.Responses)
                 .WithOne(r => r.Survey)
                 .IsRequired(true)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<User>()
-                .HasMany(s => s.Surveys)
+                .HasMany(u => u.Surveys)
                 .WithOne(s => s.User)
                 .IsRequired(true)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<Respondent>()
-                .HasMany(r => r.Responses)
-                .WithOne(r => r.Respondent)
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Responses)
+                .WithOne(r => r.User)
                 .IsRequired(true)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Group>()
                 .HasMany(g => g.Users)
