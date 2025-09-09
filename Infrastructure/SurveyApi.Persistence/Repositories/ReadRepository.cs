@@ -36,7 +36,7 @@ namespace SurveyApi.Persistence.Repositories
 
             if (!tracking)
                 query = Table.AsNoTracking();
-            return await Table.FirstOrDefaultAsync(data => data.Id == Guid.Parse(id));
+            return await Table.FindAsync(Guid.Parse(id));
         }
         public async Task<T> GetSingleAsync(System.Linq.Expressions.Expression<Func<T, bool>> method, bool tracking = true)
         {
