@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace SurveyApi.Persistence.Migrations
 {
     /// <inheritdoc />
@@ -37,21 +39,6 @@ namespace SurveyApi.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Respondent",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    EMail = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Respondent", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "SurveyStatuses",
                 columns: table => new
                 {
@@ -68,7 +55,7 @@ namespace SurveyApi.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UsesrName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     EMail = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false)
@@ -170,18 +157,11 @@ namespace SurveyApi.Persistence.Migrations
                     BeginDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     SurveyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RespondentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Responses", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Responses_Respondent_RespondentId",
-                        column: x => x.RespondentId,
-                        principalTable: "Respondent",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Responses_Surveys_SurveyId",
                         column: x => x.SurveyId,
@@ -264,6 +244,27 @@ namespace SurveyApi.Persistence.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.InsertData(
+                table: "QuestionTypes",
+                columns: new[] { "Id", "Type" },
+                values: new object[,]
+                {
+                    { new Guid("6d7f3e28-1b9c-42a1-8f4a-5c3d7e2f1b66"), 1 },
+                    { new Guid("a92f1c3d-73b4-40f1-9c88-1e6d5f2c9a11"), 0 },
+                    { new Guid("b19d5a3c-8c71-4e4f-9d0b-7f13a2e9c8d4"), 3 },
+                    { new Guid("f81c7d5a-2e4b-4a9f-97c1-6a2f3e8d9b44"), 2 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "SurveyStatuses",
+                columns: new[] { "Id", "SurveyStats" },
+                values: new object[,]
+                {
+                    { new Guid("3b8a4c1b-7f5a-45f3-8cf3-1c6f9e4b9f11"), 1 },
+                    { new Guid("4c2e9d17-5f88-4a7e-a62e-2a4f0e9d3f72"), 2 },
+                    { new Guid("e7d9f8a2-24b1-4e73-9c6d-0e2b3f6a9a55"), 0 }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AnswerOptions_AnswerId",
                 table: "AnswerOptions",
@@ -303,11 +304,6 @@ namespace SurveyApi.Persistence.Migrations
                 name: "IX_Questions_SurveyId",
                 table: "Questions",
                 column: "SurveyId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Responses_RespondentId",
-                table: "Responses",
-                column: "RespondentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Responses_SurveyId",
@@ -353,9 +349,6 @@ namespace SurveyApi.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "Questions");
-
-            migrationBuilder.DropTable(
-                name: "Respondent");
 
             migrationBuilder.DropTable(
                 name: "QuestionTypes");

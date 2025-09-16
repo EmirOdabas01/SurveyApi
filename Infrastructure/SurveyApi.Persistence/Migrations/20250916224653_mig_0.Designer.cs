@@ -12,8 +12,8 @@ using SurveyApi.Persistence.Contexts;
 namespace SurveyApi.Persistence.Migrations
 {
     [DbContext(typeof(SurveyApiDbContext))]
-    [Migration("20250908135606_mig_2")]
-    partial class mig_2
+    [Migration("20250916224653_mig_0")]
+    partial class mig_0
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -170,6 +170,28 @@ namespace SurveyApi.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("QuestionTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("a92f1c3d-73b4-40f1-9c88-1e6d5f2c9a11"),
+                            Type = 0
+                        },
+                        new
+                        {
+                            Id = new Guid("6d7f3e28-1b9c-42a1-8f4a-5c3d7e2f1b66"),
+                            Type = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("f81c7d5a-2e4b-4a9f-97c1-6a2f3e8d9b44"),
+                            Type = 2
+                        },
+                        new
+                        {
+                            Id = new Guid("b19d5a3c-8c71-4e4f-9d0b-7f13a2e9c8d4"),
+                            Type = 3
+                        });
                 });
 
             modelBuilder.Entity("SurveyApi.Domain.Entities.Response", b =>
@@ -255,6 +277,23 @@ namespace SurveyApi.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("SurveyStatuses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("e7d9f8a2-24b1-4e73-9c6d-0e2b3f6a9a55"),
+                            SurveyStats = 0
+                        },
+                        new
+                        {
+                            Id = new Guid("3b8a4c1b-7f5a-45f3-8cf3-1c6f9e4b9f11"),
+                            SurveyStats = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("4c2e9d17-5f88-4a7e-a62e-2a4f0e9d3f72"),
+                            SurveyStats = 2
+                        });
                 });
 
             modelBuilder.Entity("SurveyApi.Domain.Entities.User", b =>
@@ -275,7 +314,7 @@ namespace SurveyApi.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserName")
+                    b.Property<string>("UsesrName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
