@@ -1,4 +1,5 @@
-﻿using SurveyApi.Application.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using SurveyApi.Application.Repositories;
 using SurveyApi.Domain.Entities;
 using SurveyApi.Persistence.Contexts;
 using System;
@@ -9,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace SurveyApi.Persistence.Repositories
 {
-    public class UserReadRepository : ReadRepository<User>, IUserReadRepository
+    public class AnswerWriteRepository : WriteRepository<Answer>, IAnswerWriteRepository
     {
-        public UserReadRepository(SurveyApiDbContext context) : base(context)
+        public AnswerWriteRepository(SurveyApiDbContext context) : base(context)
         {
         }
     }

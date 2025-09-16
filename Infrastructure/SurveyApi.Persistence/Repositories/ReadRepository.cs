@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using SurveyApi.Persistence.Contexts;
 using SurveyApi.Domain.Entities;
+using System.Linq.Expressions;
 
 namespace SurveyApi.Persistence.Repositories
 {
@@ -38,7 +39,7 @@ namespace SurveyApi.Persistence.Repositories
                 query = Table.AsNoTracking();
             return await Table.FindAsync(Guid.Parse(id));
         }
-        public async Task<T> GetSingleAsync(System.Linq.Expressions.Expression<Func<T, bool>> method, bool tracking = true)
+        public async Task<T> GetSingleAsync(Expression<Func<T, bool>> method, bool tracking = true)
         {
             var query = Table.AsQueryable();
 
@@ -47,7 +48,7 @@ namespace SurveyApi.Persistence.Repositories
             return await Table.FirstOrDefaultAsync(method);
         }
 
-        public IQueryable<T> GetWhere(System.Linq.Expressions.Expression<Func<T, bool>> method, bool tracking = true)
+        public IQueryable<T> GetWhere(Expression<Func<T, bool>> method, bool tracking = true)
         {
             var query = Table.Where(method);
 

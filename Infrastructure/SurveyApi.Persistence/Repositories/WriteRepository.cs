@@ -28,10 +28,9 @@ namespace SurveyApi.Persistence.Repositories
             return  entityEntry.State == EntityState.Added;
         }
 
-        public async Task<bool> AddRangeAsync(List<T> models)
+        public async Task AddRangeAsync(List<T> models)
         {
             await Table.AddRangeAsync(models);
-            return true;
         }
 
         public bool Remove(T model)
@@ -46,10 +45,9 @@ namespace SurveyApi.Persistence.Repositories
             return Remove(entity);
         }
 
-        public bool RemoveRange(List<T> models)
+        public void RemoveRange(List<T> models)
         {
             Table.RemoveRange(models);
-            return true;
         }
 
         public async Task<int> SaveAsync()

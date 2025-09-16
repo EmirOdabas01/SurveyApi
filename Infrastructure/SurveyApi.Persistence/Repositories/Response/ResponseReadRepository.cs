@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace SurveyApi.Persistence.Repositories
 {
-    public class UserReadRepository : ReadRepository<User>, IUserReadRepository
+    public class ResponseReadRepository : ReadRepository<Response>, IResponseReadRepository
     {
-        public UserReadRepository(SurveyApiDbContext context) : base(context)
+        public ResponseReadRepository(SurveyApiDbContext context) : base(context)
         {
         }
     }

@@ -22,15 +22,4 @@
     <ProjectReference Include="..\..\Core\SurveyApi.Application\SurveyApi.Application.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Repositories\Group\" />
-    <Folder Include="Repositories\AnswerOption\" />
-    <Folder Include="Repositories\Answer\" />
-    <Folder Include="Repositories\Question\" />
-    <Folder Include="Repositories\QuestionOption\" />
-    <Folder Include="Repositories\Response\" />
-    <Folder Include="Repositories\SurveyStatus\" />
-    <Folder Include="Repositories\Survey\" />
-  </ItemGroup>
-
 </Project>
