@@ -4,14 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SurveyApi.Domain.Entities
+namespace SurveyApi.Application.ViewModels.Response
 {
-    public class Response : BaseEntity
+    public class VM_Create_Response
     {
         public DateTime BeginDate { get; set; }
         public DateTime? EndDate { get; set; }
-        public  ICollection<Answer> Answers { get; set; }
-        public  Survey Survey { get; set; }
-        public  User User { get; set; }
+        public string SurveyId { get; set; }
     }
 }

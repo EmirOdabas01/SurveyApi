@@ -8,9 +8,9 @@ namespace SurveyApi.Domain.Entities
 {
     public class Question : BaseEntity
     {
-        public required int Order { get; set; }
-        public required string QuestionText { get; set; }
-        public required bool IsMandatory { get; set; }
+        public int Order { get; set; }
+        public string QuestionText { get; set; }
+        public bool IsMandatory { get; set; }
         public Survey Survey { get; set; }
         public QuestionType QuestionType { get; set; }
         public ICollection<QuestionOption> QuestionOptions { get; set; }

@@ -3,6 +3,8 @@ using SurveyApi.Persistence;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddPersistenceServices();
+builder.Services.AddCors(corsOption => corsOption.AddDefaultPolicy(options
+    => options.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();

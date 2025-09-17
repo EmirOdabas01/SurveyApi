@@ -1,4 +1,4 @@
-﻿namespace SurveyApi.Domain.Enums;
+﻿namespace SurveyApi.Application.Enums;
 
 public enum QuestType
 {

@@ -4,13 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SurveyApi.Domain.Entities
+namespace SurveyApi.Application.ViewModels.QuestionOption
 {
-    public class QuestionOption : BaseEntity
+    public class VM_Create_QuestionOption
     {
         public int Order { get; set; }
         public string Value { get; set; }
-        public Question Question { get; set; }
-        public ICollection<AnswerOption> AnswerOptions { get; set; }
+        public string QuestionId { get; set; }
     }
 }

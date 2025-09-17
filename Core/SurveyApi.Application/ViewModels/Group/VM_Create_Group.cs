@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SurveyApi.Domain.Entities
+namespace SurveyApi.Application.ViewModels.Group
 {
-    public class Group : BaseEntity
+    public class VM_Create_Group
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public ICollection<User> Users { get; set; }
     }
 }
