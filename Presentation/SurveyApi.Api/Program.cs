@@ -1,5 +1,7 @@
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using SurveyApi.Application.Validations.User;
+using SurveyApi.Infrastructure.Filters;
 using SurveyApi.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,8 +10,9 @@ builder.Services.AddPersistenceServices();
 builder.Services.AddCors(corsOption => corsOption.AddDefaultPolicy(options
     => options.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 
-builder.Services.AddControllers()
-    .AddFluentValidation(configuration => configuration.RegisterValidatorsFromAssemblyContaining<UserValidator>());
+builder.Services.AddControllers(options => options.Filters.Add<ValidationFilter>())
+    .AddFluentValidation(configuration => configuration.RegisterValidatorsFromAssemblyContaining<UserValidator>())
+    .ConfigureApiBehaviorOptions(options => options.SuppressModelStateInvalidFilter = true);
 builder.Services.AddOpenApi();
 
 

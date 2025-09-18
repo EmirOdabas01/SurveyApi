@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Core\SurveyApi.Application\SurveyApi.Application.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\SurveyApi.Infrastructure\SurveyApi.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Infrastructure\SurveyApi.Persistence\SurveyApi.Persistence.csproj" />
   </ItemGroup>
 
