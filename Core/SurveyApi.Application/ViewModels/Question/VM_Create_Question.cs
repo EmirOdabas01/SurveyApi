@@ -13,6 +13,5 @@ namespace SurveyApi.Application.ViewModels.Question
         public bool IsMandatory { get; set; }
         public string SurveyId { get; set; }
         public string QuestionTypeId { get; set; }
-
     }
 }
