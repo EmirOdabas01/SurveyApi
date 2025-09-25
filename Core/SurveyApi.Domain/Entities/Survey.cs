@@ -19,5 +19,6 @@ namespace SurveyApi.Domain.Entities
         public ICollection<Question> Questions { get; set; }
         public ICollection<Response> Responses { get; set; } 
         public User User { get; set; }
+        public ImageFile ImageFile { get; set; }
     }
 }

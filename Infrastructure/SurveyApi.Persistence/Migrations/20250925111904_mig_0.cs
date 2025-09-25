@@ -31,7 +31,7 @@ namespace SurveyApi.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Type = table.Column<int>(type: "int", nullable: false)
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -43,7 +43,7 @@ namespace SurveyApi.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SurveyStats = table.Column<int>(type: "int", nullable: false)
+                    SurveyStatuse = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -96,7 +96,7 @@ namespace SurveyApi.Persistence.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Visibility = table.Column<int>(type: "int", nullable: false),
+                    Visibility = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     MinResponse = table.Column<int>(type: "int", nullable: false),
@@ -117,6 +117,25 @@ namespace SurveyApi.Persistence.Migrations
                         name: "FK_Surveys_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ImageFile",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Path = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ImageFile", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ImageFile_Surveys_Id",
+                        column: x => x.Id,
+                        principalTable: "Surveys",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -249,20 +268,20 @@ namespace SurveyApi.Persistence.Migrations
                 columns: new[] { "Id", "Type" },
                 values: new object[,]
                 {
-                    { new Guid("6d7f3e28-1b9c-42a1-8f4a-5c3d7e2f1b66"), 1 },
-                    { new Guid("a92f1c3d-73b4-40f1-9c88-1e6d5f2c9a11"), 0 },
-                    { new Guid("b19d5a3c-8c71-4e4f-9d0b-7f13a2e9c8d4"), 3 },
-                    { new Guid("f81c7d5a-2e4b-4a9f-97c1-6a2f3e8d9b44"), 2 }
+                    { new Guid("6d7f3e28-1b9c-42a1-8f4a-5c3d7e2f1b66"), "Dropdown" },
+                    { new Guid("a92f1c3d-73b4-40f1-9c88-1e6d5f2c9a11"), "Open" },
+                    { new Guid("b19d5a3c-8c71-4e4f-9d0b-7f13a2e9c8d4"), "Logical" },
+                    { new Guid("f81c7d5a-2e4b-4a9f-97c1-6a2f3e8d9b44"), "Multiple Choice" }
                 });
 
             migrationBuilder.InsertData(
                 table: "SurveyStatuses",
-                columns: new[] { "Id", "SurveyStats" },
+                columns: new[] { "Id", "SurveyStatuse" },
                 values: new object[,]
                 {
-                    { new Guid("3b8a4c1b-7f5a-45f3-8cf3-1c6f9e4b9f11"), 1 },
-                    { new Guid("4c2e9d17-5f88-4a7e-a62e-2a4f0e9d3f72"), 2 },
-                    { new Guid("e7d9f8a2-24b1-4e73-9c6d-0e2b3f6a9a55"), 0 }
+                    { new Guid("3b8a4c1b-7f5a-45f3-8cf3-1c6f9e4b9f11"), "Open" },
+                    { new Guid("4c2e9d17-5f88-4a7e-a62e-2a4f0e9d3f72"), "Closed" },
+                    { new Guid("e7d9f8a2-24b1-4e73-9c6d-0e2b3f6a9a55"), "Planned" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -334,6 +353,9 @@ namespace SurveyApi.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "GroupUser");
+
+            migrationBuilder.DropTable(
+                name: "ImageFile");
 
             migrationBuilder.DropTable(
                 name: "Answers");

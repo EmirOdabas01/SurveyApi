@@ -1,12 +1,14 @@
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using SurveyApi.Application.Validations.User;
+using SurveyApi.Infrastructure;
 using SurveyApi.Infrastructure.Filters;
 using SurveyApi.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddPersistenceServices();
+builder.Services.AddInfrastructureServices();
 builder.Services.AddCors(corsOption => corsOption.AddDefaultPolicy(options
     => options.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 
@@ -18,6 +20,7 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 
 var app = builder.Build();
 
@@ -31,6 +34,7 @@ if (app.Environment.IsDevelopment())
     });
     app.MapOpenApi();
 }
+app.UseStaticFiles();
 
 app.UseHttpsRedirection();
 

@@ -101,6 +101,24 @@ namespace SurveyApi.Persistence.Migrations
                     b.ToTable("Groups");
                 });
 
+            modelBuilder.Entity("SurveyApi.Domain.Entities.ImageFile", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ImageFile");
+                });
+
             modelBuilder.Entity("SurveyApi.Domain.Entities.Question", b =>
                 {
                     b.Property<Guid>("Id")
@@ -183,7 +201,7 @@ namespace SurveyApi.Persistence.Migrations
                         new
                         {
                             Id = new Guid("f81c7d5a-2e4b-4a9f-97c1-6a2f3e8d9b44"),
-                            Type = "Multiple Choise"
+                            Type = "Multiple Choice"
                         },
                         new
                         {
@@ -207,7 +225,7 @@ namespace SurveyApi.Persistence.Migrations
                     b.Property<Guid>("SurveyId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("UserId")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -376,6 +394,17 @@ namespace SurveyApi.Persistence.Migrations
                     b.Navigation("QuestionOption");
                 });
 
+            modelBuilder.Entity("SurveyApi.Domain.Entities.ImageFile", b =>
+                {
+                    b.HasOne("SurveyApi.Domain.Entities.Survey", "Survey")
+                        .WithOne("ImageFile")
+                        .HasForeignKey("SurveyApi.Domain.Entities.ImageFile", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Survey");
+                });
+
             modelBuilder.Entity("SurveyApi.Domain.Entities.Question", b =>
                 {
                     b.HasOne("SurveyApi.Domain.Entities.QuestionType", "QuestionType")
@@ -472,6 +501,9 @@ namespace SurveyApi.Persistence.Migrations
 
             modelBuilder.Entity("SurveyApi.Domain.Entities.Survey", b =>
                 {
+                    b.Navigation("ImageFile")
+                        .IsRequired();
+
                     b.Navigation("Questions");
 
                     b.Navigation("Responses");

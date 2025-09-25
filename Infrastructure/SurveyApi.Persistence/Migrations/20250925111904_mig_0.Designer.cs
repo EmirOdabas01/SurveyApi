@@ -12,7 +12,7 @@ using SurveyApi.Persistence.Contexts;
 namespace SurveyApi.Persistence.Migrations
 {
     [DbContext(typeof(SurveyApiDbContext))]
-    [Migration("20250916224653_mig_0")]
+    [Migration("20250925111904_mig_0")]
     partial class mig_0
     {
         /// <inheritdoc />
@@ -104,6 +104,24 @@ namespace SurveyApi.Persistence.Migrations
                     b.ToTable("Groups");
                 });
 
+            modelBuilder.Entity("SurveyApi.Domain.Entities.ImageFile", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ImageFile");
+                });
+
             modelBuilder.Entity("SurveyApi.Domain.Entities.Question", b =>
                 {
                     b.Property<Guid>("Id")
@@ -164,8 +182,9 @@ namespace SurveyApi.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -175,22 +194,22 @@ namespace SurveyApi.Persistence.Migrations
                         new
                         {
                             Id = new Guid("a92f1c3d-73b4-40f1-9c88-1e6d5f2c9a11"),
-                            Type = 0
+                            Type = "Open"
                         },
                         new
                         {
                             Id = new Guid("6d7f3e28-1b9c-42a1-8f4a-5c3d7e2f1b66"),
-                            Type = 1
+                            Type = "Dropdown"
                         },
                         new
                         {
                             Id = new Guid("f81c7d5a-2e4b-4a9f-97c1-6a2f3e8d9b44"),
-                            Type = 2
+                            Type = "Multiple Choice"
                         },
                         new
                         {
                             Id = new Guid("b19d5a3c-8c71-4e4f-9d0b-7f13a2e9c8d4"),
-                            Type = 3
+                            Type = "Logical"
                         });
                 });
 
@@ -253,8 +272,9 @@ namespace SurveyApi.Persistence.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Visibility")
-                        .HasColumnType("int");
+                    b.Property<string>("Visibility")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -271,8 +291,9 @@ namespace SurveyApi.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("SurveyStats")
-                        .HasColumnType("int");
+                    b.Property<string>("SurveyStatuse")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -282,17 +303,17 @@ namespace SurveyApi.Persistence.Migrations
                         new
                         {
                             Id = new Guid("e7d9f8a2-24b1-4e73-9c6d-0e2b3f6a9a55"),
-                            SurveyStats = 0
+                            SurveyStatuse = "Planned"
                         },
                         new
                         {
                             Id = new Guid("3b8a4c1b-7f5a-45f3-8cf3-1c6f9e4b9f11"),
-                            SurveyStats = 1
+                            SurveyStatuse = "Open"
                         },
                         new
                         {
                             Id = new Guid("4c2e9d17-5f88-4a7e-a62e-2a4f0e9d3f72"),
-                            SurveyStats = 2
+                            SurveyStatuse = "Closed"
                         });
                 });
 
@@ -376,6 +397,17 @@ namespace SurveyApi.Persistence.Migrations
                     b.Navigation("QuestionOption");
                 });
 
+            modelBuilder.Entity("SurveyApi.Domain.Entities.ImageFile", b =>
+                {
+                    b.HasOne("SurveyApi.Domain.Entities.Survey", "Survey")
+                        .WithOne("ImageFile")
+                        .HasForeignKey("SurveyApi.Domain.Entities.ImageFile", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Survey");
+                });
+
             modelBuilder.Entity("SurveyApi.Domain.Entities.Question", b =>
                 {
                     b.HasOne("SurveyApi.Domain.Entities.QuestionType", "QuestionType")
@@ -417,8 +449,7 @@ namespace SurveyApi.Persistence.Migrations
                     b.HasOne("SurveyApi.Domain.Entities.User", "User")
                         .WithMany("Responses")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("Survey");
 
@@ -473,6 +504,9 @@ namespace SurveyApi.Persistence.Migrations
 
             modelBuilder.Entity("SurveyApi.Domain.Entities.Survey", b =>
                 {
+                    b.Navigation("ImageFile")
+                        .IsRequired();
+
                     b.Navigation("Questions");
 
                     b.Navigation("Responses");

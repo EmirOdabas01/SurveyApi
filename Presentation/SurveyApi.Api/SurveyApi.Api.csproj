@@ -22,4 +22,10 @@
     <ProjectReference Include="..\..\Infrastructure\SurveyApi.Persistence\SurveyApi.Persistence.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="resources\images\" />
+    <Folder Include="wwwroot\" />
+    <Folder Include="wwwroot\resources\images\" />
+  </ItemGroup>
+
 </Project>
