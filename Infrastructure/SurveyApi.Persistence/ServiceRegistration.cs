@@ -34,6 +34,8 @@ namespace SurveyApi.Persistence
             services.AddScoped<IAnswerOptionWriteRepository, AnswerOptionWriteRepository>();
             services.AddScoped<IAnswerReadRepository, AnswerReadRepository>();
             services.AddScoped<IAnswerWriteRepository, AnswerWriteRepository>();
+            services.AddScoped<IImageFileReadRepository, ImageFileReadRepository>();
+            services.AddScoped<IImageFileWriteRepository, ImageFileWriteRepository>();
         }
     }
 }
