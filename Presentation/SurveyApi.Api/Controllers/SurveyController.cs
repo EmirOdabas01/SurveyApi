@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SurveyApi.Application.Features.Queries.Survey.GetAllSurvey;
 using SurveyApi.Application.Repositories;
 using SurveyApi.Application.RequestParameters;
 using SurveyApi.Application.Services;
@@ -14,31 +16,22 @@ namespace SurveyApi.Api.Controllers
         private readonly ISurveyReadRepository _surveyReadRepository;
         private readonly ISurveyWriteRepository _surveyWriteRepository;
         private readonly IFileService _fileService;
-       
+        private readonly IMediator _mediator;
         public SurveyController(ISurveyReadRepository surveyReadRepository,
            ISurveyWriteRepository surveyWriteRepository, 
-            IFileService fileService)
+            IFileService fileService,
+            IMediator mediator)
         {
             _surveyReadRepository = surveyReadRepository;
             _surveyWriteRepository = surveyWriteRepository;
             _fileService = fileService;
+            _mediator = mediator;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] Pagination pagination)
+        public async Task<IActionResult> Get([FromQuery] GetAllSurveyQueryRequest request)
         {
-            var result =  _surveyReadRepository.GetAll(false).Skip(pagination.Size * pagination.Page).Take(pagination.Size).Select(s => new
-            {
-                s.Id,
-                s.Name,
-                s.Description,
-                s.MinResponse,
-                s.MaxResponse,
-                s.StartDate,
-                s.EndDate,
-                s.ImageFile.Path,
-            }).ToList();
-
+            var result = await _mediator.Send(request);
             return Ok(result);
         }
 

@@ -1,5 +1,6 @@
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using SurveyApi.Application;
 using SurveyApi.Application.Validations.User;
 using SurveyApi.Infrastructure;
 using SurveyApi.Infrastructure.Filters;
@@ -7,6 +8,7 @@ using SurveyApi.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddApplicationServices();
 builder.Services.AddPersistenceServices();
 builder.Services.AddInfrastructureServices();
 builder.Services.AddCors(corsOption => corsOption.AddDefaultPolicy(options
