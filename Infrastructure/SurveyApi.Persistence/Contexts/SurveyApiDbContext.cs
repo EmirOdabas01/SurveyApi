@@ -31,66 +31,77 @@ namespace SurveyApi.Persistence.Contexts
             modelBuilder.Entity<SurveyStatus>()
                 .HasMany(st => st.Surveys)
                 .WithOne(s => s.SurveyStatus)
+                .HasForeignKey(s => s.SurveyStatusId)
                 .IsRequired(true)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Survey>()
                 .HasMany(s => s.Questions)
                 .WithOne(q => q.Survey)
+                .HasForeignKey(q => q.SurveyId)
                 .IsRequired(true)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<QuestionType>()
                  .HasMany(qt => qt.Questions)
                  .WithOne(q => q.QuestionType)
+                 .HasForeignKey(q => q.QuestionTypeId)
                  .IsRequired(true)
                  .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Question>()
                 .HasMany(q => q.QuestionOptions)
                 .WithOne(qo => qo.Question)
+                .HasForeignKey(qo => qo.QuestionId)
                 .IsRequired(true)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<QuestionOption>()
                 .HasMany(qo => qo.AnswerOptions)
                 .WithOne(ao => ao.QuestionOption)
+                .HasForeignKey(ao => ao.QuestionOptionId)
                 .IsRequired(true)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<AnswerOption>()
                 .HasOne(ao => ao.Answer)
                 .WithMany(a => a.AnswerOptions)
+                .HasForeignKey(ao => ao.AnswerId)
                 .IsRequired(true)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Answer>()
                 .HasOne(a => a.Question)
                 .WithMany(q => q.Answers)
+                .HasForeignKey(a => a.QuestionId)
                 .IsRequired(true)
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Response>()
                 .HasMany(r => r.Answers)
                 .WithOne(a => a.Response)
+                .HasForeignKey(a => a.ResponseId)
                 .IsRequired(true)
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Survey>()
                 .HasMany(s => s.Responses)
                 .WithOne(r => r.Survey)
+                .HasForeignKey(r => r.SurveyId)
                 .IsRequired(true)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<User>()
                 .HasMany(u => u.Surveys)
                 .WithOne(s => s.User)
+                .HasForeignKey(s => s.UserId)
                 .IsRequired(true)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<User>()
                 .HasMany(u => u.Responses)
                 .WithOne(r => r.User)
+                .HasForeignKey(r => r.UserId)
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.NoAction);
 
@@ -120,6 +131,22 @@ namespace SurveyApi.Persistence.Contexts
                 new { Id = Guid.Parse("f81c7d5a-2e4b-4a9f-97c1-6a2f3e8d9b44"), Type = "Multiple Choice" },
                 new { Id = Guid.Parse("b19d5a3c-8c71-4e4f-9d0b-7f13a2e9c8d4"), Type = "Logical" }
                 );
+
         }
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            var datas = ChangeTracker.Entries<Survey>();
+
+            foreach(var data in datas)
+            {
+                if(data.State == EntityState.Added)
+                {
+                    data.Entity.SurveyStatusId = Guid.Parse("e7d9f8a2-24b1-4e73-9c6d-0e2b3f6a9a55");
+                }
+            }
+
+            return await base.SaveChangesAsync(cancellationToken);
+        }
+        
     }
 }

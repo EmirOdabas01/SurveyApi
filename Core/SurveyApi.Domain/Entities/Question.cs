@@ -15,5 +15,8 @@ namespace SurveyApi.Domain.Entities
         public QuestionType QuestionType { get; set; }
         public ICollection<QuestionOption> QuestionOptions { get; set; }
         public ICollection<Answer> Answers { get; set; }
+
+        public Guid SurveyId { get; set; }
+        public Guid QuestionTypeId { get; set; }
     }
 }

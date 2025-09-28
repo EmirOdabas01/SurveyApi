@@ -14,11 +14,11 @@ namespace SurveyApi.Application.Validations.Survey
         public SurveyValidator()
         {
             RuleFor(s => s.Name)
-                .Length(5, 20)
+                .Length(5, 200)
                 .WithMessage("Survey name length must be between 5 and 20");
 
             RuleFor(s => s.Description)
-                .Length(10, 100)
+                .Length(10, 200)
                 .WithMessage("Description length must be between 10 and 100");
 
             RuleFor(s => s.Visibility)

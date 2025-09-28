@@ -18,7 +18,6 @@ namespace SurveyApi.Application.ViewModels.Survey
         public int MaxResponse { get; set; }
 
         public string UserId { get; set; }
-        public string SurveyStatusId { get; set; }
 
     }
 }
