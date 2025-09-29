@@ -19,10 +19,4 @@
     <ProjectReference Include="..\SurveyApi.Domain\SurveyApi.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\Commands\Survey\CreateSurvey\" />
-    <Folder Include="Features\Commands\Survey\DeleteSurvey\" />
-    <Folder Include="Features\Commands\Survey\UpdateSurvey\" />
-  </ItemGroup>
-
 </Project>

@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SurveyApi.Application.Features.Queries.Survey.GetSurveyById
+namespace SurveyApi.Application.Features.Commands.Survey.RemoveSurvey
 {
-    public class GetSurveyByIdQueryRequest : IRequest<GetSurveyByIdQueryResponse>
+    public class RemoveSurveyCommandRequest : IRequest<RemoveSurveyCommandResponse>
     {
         public string Id { get; set; }
     }
