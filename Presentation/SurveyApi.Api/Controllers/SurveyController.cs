@@ -2,7 +2,12 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SurveyApi.Application.Features.Commands.Survey.CreateSurvey;
+using SurveyApi.Application.Features.Commands.Survey.RemoveSurvey;
+using SurveyApi.Application.Features.Commands.Survey.UpdateSurvey;
 using SurveyApi.Application.Features.Queries.Survey.GetAllSurvey;
+using SurveyApi.Application.Features.Queries.Survey.GetAllSurveyForUsers;
+using SurveyApi.Application.Features.Queries.Survey.GetSurveyById;
+using SurveyApi.Application.Features.Queries.Survey.GetSurveyByIdDetail;
 using SurveyApi.Application.Repositories;
 using SurveyApi.Application.RequestParameters;
 using SurveyApi.Application.Services;
@@ -14,8 +19,7 @@ namespace SurveyApi.Api.Controllers
     [ApiController]
     public class SurveyController : ControllerBase
     {
-        private readonly ISurveyReadRepository _surveyReadRepository;
-        private readonly ISurveyWriteRepository _surveyWriteRepository;
+        
         private readonly IFileService _fileService;
         private readonly IMediator _mediator;
         public SurveyController(ISurveyReadRepository surveyReadRepository,
@@ -23,28 +27,56 @@ namespace SurveyApi.Api.Controllers
             IFileService fileService,
             IMediator mediator)
         {
-            _surveyReadRepository = surveyReadRepository;
-            _surveyWriteRepository = surveyWriteRepository;
+            
             _fileService = fileService;
             _mediator = mediator;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] GetAllSurveyQueryRequest request)
+        [HttpGet("get-all")]
+        public async Task<IActionResult> GetAllSurvey([FromQuery] GetAllSurveyQueryRequest request)
         {
             var result = await _mediator.Send(request);
             return Ok(result);
         }
-
-        [HttpPost]
+        [HttpGet("get-all-foruser")]
+        public async Task<IActionResult> GetAllSurveyForUser([FromQuery] GetAllSurveyForUsersQueryRequest request)
+        {
+            var result = await _mediator.Send(request);
+            return Ok(result);
+        }
+        [HttpGet("get/{id}")]
+        public async Task<IActionResult> GetSurveyById([FromQuery] GetSurveyByIdQueryRequest request)
+        {
+            var result = await _mediator.Send(request);
+            return Ok(result);
+        }
+        [HttpGet("get-detail{id}")]
+        public async Task<IActionResult> GetSUrveyByIdDetail([FromQuery] GetSurveyByIdDetailQueryRequest request)
+        {
+            var result = await _mediator.Send(request);
+            return Ok(result);
+        }
+        [HttpPost("create")]
         public async Task<IActionResult> create([FromBody] CreateSurveyCommandRequest request)
         {
 
             var result = await _mediator.Send(request);
             return Ok(result);
         }
+        [HttpDelete("delete/{id}")]
+        public async Task<IActionResult> DeleteSurvey([FromRoute] RemoveSurveyCommandRequest request)
+        {
+            var result = await _mediator.Send(request);
+            return Ok(result);
+        }
+        [HttpPut("update")]
+        public async Task<IActionResult> UpdateSurvey([FromBody] UpdateSurveyCommandRequest request)
+        {
+            var result = await _mediator.Send(request);
+            return Ok(result);
+        }
 
-        [HttpPost("upload")]
+        [HttpPost("upload/{id}")]
         public async Task<IActionResult> Upload(string surveyıd)
         {
             var result =  await _fileService.UploadAsync("resources\\images", Request.Form.Files, surveyıd);

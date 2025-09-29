@@ -21,7 +21,6 @@ namespace SurveyApi.Application.Features.Queries.Survey.GetSurveyByIdDetail
         {
             var survey = await _surveyReadRepository.GetByIdAsync(request.Id, false);
 
-            if(survey != null)
             return new()
             {
                 Id = survey.Id,
