@@ -12,7 +12,7 @@ using SurveyApi.Persistence.Contexts;
 namespace SurveyApi.Persistence.Migrations
 {
     [DbContext(typeof(SurveyApiDbContext))]
-    [Migration("20250925111904_mig_0")]
+    [Migration("20250929143247_mig_0")]
     partial class mig_0
     {
         /// <inheritdoc />
@@ -24,21 +24,6 @@ namespace SurveyApi.Persistence.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("GroupUser", b =>
-                {
-                    b.Property<Guid>("GroupsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("UsersId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("GroupsId", "UsersId");
-
-                    b.HasIndex("UsersId");
-
-                    b.ToTable("GroupUser");
-                });
 
             modelBuilder.Entity("SurveyApi.Domain.Entities.Answer", b =>
                 {
@@ -228,14 +213,9 @@ namespace SurveyApi.Persistence.Migrations
                     b.Property<Guid>("SurveyId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("SurveyId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Responses");
                 });
@@ -269,18 +249,14 @@ namespace SurveyApi.Persistence.Migrations
                     b.Property<Guid>("SurveyStatusId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("VisibilityId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Visibility")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("SurveyStatusId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("VisibilityId");
 
                     b.ToTable("Surveys");
                 });
@@ -317,46 +293,36 @@ namespace SurveyApi.Persistence.Migrations
                         });
                 });
 
-            modelBuilder.Entity("SurveyApi.Domain.Entities.User", b =>
+            modelBuilder.Entity("SurveyApi.Domain.Entities.Visibility", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("EMail")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PasswordHash")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UsesrName")
+                    b.Property<string>("State")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
-                });
+                    b.ToTable("Visibilities");
 
-            modelBuilder.Entity("GroupUser", b =>
-                {
-                    b.HasOne("SurveyApi.Domain.Entities.Group", null)
-                        .WithMany()
-                        .HasForeignKey("GroupsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SurveyApi.Domain.Entities.User", null)
-                        .WithMany()
-                        .HasForeignKey("UsersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("f47ac10b-58cc-4372-a567-0e02b2c3d479"),
+                            State = "All"
+                        },
+                        new
+                        {
+                            Id = new Guid("9a1b2c3d-4e5f-6789-abcd-ef0123456789"),
+                            State = "Users"
+                        },
+                        new
+                        {
+                            Id = new Guid("d94f3f01-2c5b-4a6a-8f1b-3b2a1c4d5e6f"),
+                            State = "Groups"
+                        });
                 });
 
             modelBuilder.Entity("SurveyApi.Domain.Entities.Answer", b =>
@@ -446,14 +412,7 @@ namespace SurveyApi.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SurveyApi.Domain.Entities.User", "User")
-                        .WithMany("Responses")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
                     b.Navigation("Survey");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("SurveyApi.Domain.Entities.Survey", b =>
@@ -464,15 +423,15 @@ namespace SurveyApi.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("SurveyApi.Domain.Entities.User", "User")
+                    b.HasOne("SurveyApi.Domain.Entities.Visibility", "Visibility")
                         .WithMany("Surveys")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("VisibilityId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("SurveyStatus");
 
-                    b.Navigation("User");
+                    b.Navigation("Visibility");
                 });
 
             modelBuilder.Entity("SurveyApi.Domain.Entities.Answer", b =>
@@ -517,10 +476,8 @@ namespace SurveyApi.Persistence.Migrations
                     b.Navigation("Surveys");
                 });
 
-            modelBuilder.Entity("SurveyApi.Domain.Entities.User", b =>
+            modelBuilder.Entity("SurveyApi.Domain.Entities.Visibility", b =>
                 {
-                    b.Navigation("Responses");
-
                     b.Navigation("Surveys");
                 });
 #pragma warning restore 612, 618

@@ -33,7 +33,7 @@ namespace SurveyApi.Application.Features.Commands.Survey.UpdateSurvey
             survey.MaxResponse = request.MaxResponse;
             survey.StartDate = request.StartDate;
             survey.EndDate = request.EndDate;
-            survey.Visibility = request.Visibility.ToString();
+            
 
             await _surveyWriteRepository.SaveAsync();
             return new();

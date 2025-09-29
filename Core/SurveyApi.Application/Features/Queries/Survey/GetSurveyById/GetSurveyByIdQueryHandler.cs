@@ -21,12 +21,14 @@ namespace SurveyApi.Application.Features.Queries.Survey.GetSurveyById
         {
             var survey = await _surveyReadRepository.GetByIdAsync(request.Id, false);
 
+            if(survey == null)
+                throw new Exception();
+
             return new()
             {
                 Id = survey.Id,
                 Name = survey.Name,
                 Description = survey.Description,
-                EndDate = survey.EndDate
             };
         }
     }

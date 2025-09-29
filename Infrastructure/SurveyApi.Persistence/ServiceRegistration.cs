@@ -18,8 +18,6 @@ namespace SurveyApi.Persistence
         public static void AddPersistenceServices(this IServiceCollection services)
         {
             services.AddDbContext<SurveyApiDbContext>(options => options.UseSqlServer(Configurations.ConnectionString));
-            services.AddScoped<IUserReadRepository, UserReadRepository>();
-            services.AddScoped<IUserWriteRepository, UserWriteRepository>();
             services.AddScoped<ISurveyReadRepository, SurveyReadRepository>();
             services.AddScoped<ISurveyWriteRepository, SurveyWriteRepository>();
             services.AddScoped<IResponseReadRepository, ResponseReadRepository>();

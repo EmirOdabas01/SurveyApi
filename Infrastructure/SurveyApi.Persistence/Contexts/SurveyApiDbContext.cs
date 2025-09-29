@@ -24,8 +24,7 @@ namespace SurveyApi.Persistence.Contexts
         public DbSet<Response> Responses { get; set; }
         public DbSet<Survey> Surveys { get; set; }
         public DbSet<SurveyStatus> SurveyStatuses { get; set; }
-        public DbSet<User> Users { get; set; }
-
+        public DbSet<Visibility> Visibilities { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<SurveyStatus>()
@@ -91,24 +90,6 @@ namespace SurveyApi.Persistence.Contexts
                 .IsRequired(true)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<User>()
-                .HasMany(u => u.Surveys)
-                .WithOne(s => s.User)
-                .HasForeignKey(s => s.UserId)
-                .IsRequired(true)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<User>()
-                .HasMany(u => u.Responses)
-                .WithOne(r => r.User)
-                .HasForeignKey(r => r.UserId)
-                .IsRequired(false)
-                .OnDelete(DeleteBehavior.NoAction);
-
-            modelBuilder.Entity<Group>()
-                .HasMany(g => g.Users)
-                .WithMany(u => u.Groups);
-
             modelBuilder.Entity<ImageFile>()
                 .HasKey(ı => ı.Id);
 
@@ -116,6 +97,13 @@ namespace SurveyApi.Persistence.Contexts
                 .HasOne(ı => ı.Survey)
                 .WithOne(s => s.ImageFile)
                 .HasForeignKey<ImageFile>(ı => ı.Id);
+
+            modelBuilder.Entity<Visibility>()
+                .HasMany(v => v.Surveys)
+                .WithOne(s => s.Visibility)
+                .HasForeignKey(s => s.VisibilityId)
+                .IsRequired(true)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<SurveyStatus>()
                 .HasData(
@@ -132,6 +120,12 @@ namespace SurveyApi.Persistence.Contexts
                 new { Id = Guid.Parse("b19d5a3c-8c71-4e4f-9d0b-7f13a2e9c8d4"), Type = "Logical" }
                 );
 
+            modelBuilder.Entity<Visibility>()
+                .HasData(
+                new {Id = Guid.Parse("f47ac10b-58cc-4372-a567-0e02b2c3d479"), State = "All"},
+                new {Id = Guid.Parse("9a1b2c3d-4e5f-6789-abcd-ef0123456789"), State = "Users"},
+                new {Id = Guid.Parse("d94f3f01-2c5b-4a6a-8f1b-3b2a1c4d5e6f"), State = "Groups"}
+                );
         }
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {

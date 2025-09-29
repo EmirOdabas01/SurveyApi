@@ -51,42 +51,15 @@ namespace SurveyApi.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Users",
+                name: "Visibilities",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UsesrName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    EMail = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    State = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "GroupUser",
-                columns: table => new
-                {
-                    GroupsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UsersId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_GroupUser", x => new { x.GroupsId, x.UsersId });
-                    table.ForeignKey(
-                        name: "FK_GroupUser_Groups_GroupsId",
-                        column: x => x.GroupsId,
-                        principalTable: "Groups",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_GroupUser_Users_UsersId",
-                        column: x => x.UsersId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                    table.PrimaryKey("PK_Visibilities", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -96,13 +69,12 @@ namespace SurveyApi.Persistence.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Visibility = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     MinResponse = table.Column<int>(type: "int", nullable: false),
                     MaxResponse = table.Column<int>(type: "int", nullable: false),
-                    SurveyStatusId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    VisibilityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SurveyStatusId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -114,11 +86,11 @@ namespace SurveyApi.Persistence.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Surveys_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
+                        name: "FK_Surveys_Visibilities_VisibilityId",
+                        column: x => x.VisibilityId,
+                        principalTable: "Visibilities",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -175,8 +147,7 @@ namespace SurveyApi.Persistence.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     BeginDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    SurveyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    SurveyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -187,11 +158,6 @@ namespace SurveyApi.Persistence.Migrations
                         principalTable: "Surveys",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Responses_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -284,6 +250,16 @@ namespace SurveyApi.Persistence.Migrations
                     { new Guid("e7d9f8a2-24b1-4e73-9c6d-0e2b3f6a9a55"), "Planned" }
                 });
 
+            migrationBuilder.InsertData(
+                table: "Visibilities",
+                columns: new[] { "Id", "State" },
+                values: new object[,]
+                {
+                    { new Guid("9a1b2c3d-4e5f-6789-abcd-ef0123456789"), "Users" },
+                    { new Guid("d94f3f01-2c5b-4a6a-8f1b-3b2a1c4d5e6f"), "Groups" },
+                    { new Guid("f47ac10b-58cc-4372-a567-0e02b2c3d479"), "All" }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AnswerOptions_AnswerId",
                 table: "AnswerOptions",
@@ -303,11 +279,6 @@ namespace SurveyApi.Persistence.Migrations
                 name: "IX_Answers_ResponseId",
                 table: "Answers",
                 column: "ResponseId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_GroupUser_UsersId",
-                table: "GroupUser",
-                column: "UsersId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_QuestionOptions_QuestionId",
@@ -330,19 +301,14 @@ namespace SurveyApi.Persistence.Migrations
                 column: "SurveyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Responses_UserId",
-                table: "Responses",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Surveys_SurveyStatusId",
                 table: "Surveys",
                 column: "SurveyStatusId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Surveys_UserId",
+                name: "IX_Surveys_VisibilityId",
                 table: "Surveys",
-                column: "UserId");
+                column: "VisibilityId");
         }
 
         /// <inheritdoc />
@@ -352,7 +318,7 @@ namespace SurveyApi.Persistence.Migrations
                 name: "AnswerOptions");
 
             migrationBuilder.DropTable(
-                name: "GroupUser");
+                name: "Groups");
 
             migrationBuilder.DropTable(
                 name: "ImageFile");
@@ -362,9 +328,6 @@ namespace SurveyApi.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "QuestionOptions");
-
-            migrationBuilder.DropTable(
-                name: "Groups");
 
             migrationBuilder.DropTable(
                 name: "Responses");
@@ -382,7 +345,7 @@ namespace SurveyApi.Persistence.Migrations
                 name: "SurveyStatuses");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Visibilities");
         }
     }
 }

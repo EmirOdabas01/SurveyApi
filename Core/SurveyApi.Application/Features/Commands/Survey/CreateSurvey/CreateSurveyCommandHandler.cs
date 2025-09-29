@@ -21,17 +21,17 @@ namespace SurveyApi.Application.Features.Commands.Survey.CreateSurvey
         {
             await _surveyWriteRepository.AddAsync(new Domain.Entities.Survey
             {
-                Id = Guid.NewGuid(),
                 Name = request.Name,
                 Description = request.Description,
                 MinResponse = request.MinResponse,
                 MaxResponse = request.MaxResponse,
                 StartDate = request.StartDate,
                 EndDate = request.EndDate,
-                Visibility = request.Visibility.ToString(),
+                VisibilityId = Guid.Parse(request.VisibilityId),
                 SurveyStatusId = Guid.Parse(request.SurveyStatusId),
-                UserId = Guid.Parse(request.UserId)
+                //userId
             });
+
             await _surveyWriteRepository.SaveAsync();
             return new();
         }

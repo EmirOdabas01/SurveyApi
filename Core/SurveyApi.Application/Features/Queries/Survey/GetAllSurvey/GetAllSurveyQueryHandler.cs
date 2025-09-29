@@ -1,8 +1,6 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Mvc;
-using SurveyApi.Application.Enums;
+using Microsoft.EntityFrameworkCore;
 using SurveyApi.Application.Repositories;
-using SurveyApi.Application.RequestParameters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,34 +20,21 @@ namespace SurveyApi.Application.Features.Queries.Survey.GetAllSurvey
 
         public async Task<GetAllSurveyQueryResponse> Handle(GetAllSurveyQueryRequest request, CancellationToken cancellationToken)
         {
-            var query = _surveyReadRepository.GetAll(false).Skip(request.Size * request.Page).Take(request.Size);
-
-            if (request.Visibility == Visibility.All)
-            {
-                query = query.Where(s => s.Visibility == request.Visibility.ToString());
-            }
-            if (request.Visibility == Visibility.Users)
-            {
-                query = query.Where(s => s.Visibility == request.Visibility.ToString());
-            }
-            if (request.Visibility == Visibility.Group)
-            {
-                query = query.Where(s => s.Visibility == request.Visibility.ToString());
-            }
-
-            int count = query.Count();
-            var surveys = query.Select(s => new 
-            {
+            var surveys =  _surveyReadRepository.GetAll(false)
+                .Where(s => s.Visibility.State == "All" && s.SurveyStatus.SurveyStatuse == "Open")
+                .Skip(request.Size * request.Page)
+                .Take(request.Size)
+                .Select(s => new {
                 Id = s.Id,
                 Name = s.Name,
                 Description = s.Description,
-                EndDate = s.EndDate
-            }).ToList();
+                }).ToList();
 
+            int count = surveys.Count();
             return new()
-            { 
-                Count = count, 
-                Surveys = surveys 
+            {
+                Count = count,
+                Surveys = surveys
             };
         }
     }

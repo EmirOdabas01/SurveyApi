@@ -12,9 +12,7 @@ namespace SurveyApi.Domain.Entities
         public DateTime? EndDate { get; set; }
         public  ICollection<Answer> Answers { get; set; }
         public  Survey Survey { get; set; }
-        public  User User { get; set; }
 
         public Guid SurveyId { get; set; }
-        public Guid UserId { get; set; }
     }
 }

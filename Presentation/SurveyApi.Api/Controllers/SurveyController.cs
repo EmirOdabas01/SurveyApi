@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SurveyApi.Application.Features.Commands.Survey.CreateSurvey;
 using SurveyApi.Application.Features.Queries.Survey.GetAllSurvey;
 using SurveyApi.Application.Repositories;
 using SurveyApi.Application.RequestParameters;
@@ -36,24 +37,11 @@ namespace SurveyApi.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> create([FromBody] VM_Create_Survey model)
+        public async Task<IActionResult> create([FromBody] CreateSurveyCommandRequest request)
         {
-            var result = await _surveyWriteRepository.AddAsync(new Domain.Entities.Survey
-            {
 
-                Id = Guid.NewGuid(),
-                Name = model.Name,
-                Description = model.Description,
-                MinResponse = model.MinResponse,
-                MaxResponse = model.MaxResponse,
-                StartDate = model.StartDate,
-                EndDate = model.EndDate,
-                Visibility = model.Visibility.ToString(),
-                UserId = Guid.Parse(model.UserId)
-                
-            });
-            var final = await _surveyWriteRepository.SaveAsync();
-            return Ok(final);
+            var result = await _mediator.Send(request);
+            return Ok(result);
         }
 
         [HttpPost("upload")]
