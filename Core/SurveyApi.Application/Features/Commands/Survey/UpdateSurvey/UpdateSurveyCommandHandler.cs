@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using SurveyApi.Application.Repositories;
 using System;
 using System.Collections.Generic;
@@ -22,9 +23,13 @@ namespace SurveyApi.Application.Features.Commands.Survey.UpdateSurvey
 
         public async Task<UpdateSurveyCommandResponse> Handle(UpdateSurveyCommandRequest request, CancellationToken cancellationToken)
         {
-            var survey = await _surveyReadRepository.GetByIdAsync(request.Id);
+            //var survey = await _surveyReadRepository.GetByIdAsync(request.Id);,
+            Guid Id = Guid.Parse(request.Id);
+            var survey = await _surveyReadRepository.GetWhere(s => s.Id == Guid.Parse(request.Id))
+                .Include(s => s.SurveyStatus)
+                .FirstOrDefaultAsync();
 
-            if (survey.SurveyStatus.SurveyStatuse != "Planed")
+            if (survey.SurveyStatus.SurveyStatuse != "Planned")
                 throw new Exception();
 
             survey.Name = request.Name;

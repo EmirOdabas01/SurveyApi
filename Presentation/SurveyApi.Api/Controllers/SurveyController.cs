@@ -33,25 +33,25 @@ namespace SurveyApi.Api.Controllers
         }
 
         [HttpGet("get-all")]
-        public async Task<IActionResult> GetAllSurvey([FromQuery] GetAllSurveyQueryRequest request)
+        public async Task<IActionResult> GetAllSurvey([FromRoute] GetAllSurveyQueryRequest request)
         {
             var result = await _mediator.Send(request);
             return Ok(result);
         }
-        [HttpGet("get-all-foruser")]
-        public async Task<IActionResult> GetAllSurveyForUser([FromQuery] GetAllSurveyForUsersQueryRequest request)
+        [HttpGet("get-all-for-users")]
+        public async Task<IActionResult> GetAllSurveyForUser([FromRoute] GetAllSurveyForUsersQueryRequest request)
         {
             var result = await _mediator.Send(request);
             return Ok(result);
         }
         [HttpGet("get/{id}")]
-        public async Task<IActionResult> GetSurveyById([FromQuery] GetSurveyByIdQueryRequest request)
+        public async Task<IActionResult> GetSurveyById([FromRoute] GetSurveyByIdQueryRequest request)
         {
             var result = await _mediator.Send(request);
             return Ok(result);
         }
-        [HttpGet("get-detail{id}")]
-        public async Task<IActionResult> GetSUrveyByIdDetail([FromQuery] GetSurveyByIdDetailQueryRequest request)
+        [HttpGet("get-detail/{id}")]
+        public async Task<IActionResult> GetSUrveyByIdDetail([FromRoute] GetSurveyByIdDetailQueryRequest request)
         {
             var result = await _mediator.Send(request);
             return Ok(result);
@@ -63,7 +63,7 @@ namespace SurveyApi.Api.Controllers
             var result = await _mediator.Send(request);
             return Ok(result);
         }
-        [HttpDelete("delete/{id}")]
+        [HttpDelete("{Id}")]
         public async Task<IActionResult> DeleteSurvey([FromRoute] RemoveSurveyCommandRequest request)
         {
             var result = await _mediator.Send(request);
@@ -77,9 +77,9 @@ namespace SurveyApi.Api.Controllers
         }
 
         [HttpPost("upload/{id}")]
-        public async Task<IActionResult> Upload(string surveyıd)
+        public async Task<IActionResult> Upload(string id)
         {
-            var result =  await _fileService.UploadAsync("resources\\images", Request.Form.Files, surveyıd);
+            var result =  await _fileService.UploadAsync("resources\\images", Request.Form.Files, id);
 
             return Ok(result);
         }

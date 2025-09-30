@@ -27,15 +27,18 @@ namespace SurveyApi.Application.Features.Commands.Survey.RemoveSurvey
 
         public async Task<RemoveSurveyCommandResponse> Handle(RemoveSurveyCommandRequest request, CancellationToken cancellationToken)
         {
-            var survey = await _surveyReadRepository.GetWhere(s => s.Id == Guid.Parse(request.Id)).
-                Include(s => s.Questions)
+            Guid Id = Guid.Parse(request.Id);
+            var survey = await _surveyReadRepository.GetWhere(s => s.Id == Id)
+                .Include(s => s.SurveyStatus)
+                .Include(s => s.Questions)
                 .ThenInclude(q => q.Answers)
                 .FirstOrDefaultAsync();
+               
             
             if(survey == null)
                 throw new Exception();
             
-            if (survey.SurveyStatus.SurveyStatuse != "Planed")
+            if (survey.SurveyStatus.SurveyStatuse != "Planned")
             {
                 var questions = survey.Questions.ToList();
 
@@ -51,7 +54,7 @@ namespace SurveyApi.Application.Features.Commands.Survey.RemoveSurvey
             await _surveyWriteRepository.RemoveAsync(request.Id);
             await _surveyWriteRepository.SaveAsync();
 
-            return new();
+          return new();
         }
     }
 }

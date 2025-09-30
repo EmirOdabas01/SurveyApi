@@ -17,7 +17,7 @@ namespace SurveyApi.Persistence
                 configurationManager.SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../../Presentation/SurveyApi.Api"));
                 configurationManager.AddJsonFile("appsettings.json");
 
-                return configurationManager.GetConnectionString("SQL");
+                return configurationManager.GetConnectionString("Npgsql");
             }
         }
     }

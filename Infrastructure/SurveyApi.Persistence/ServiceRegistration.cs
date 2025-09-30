@@ -10,14 +10,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Npgsql.EntityFrameworkCore;
 namespace SurveyApi.Persistence
 {
     public static class ServiceRegistration
     {
         public static void AddPersistenceServices(this IServiceCollection services)
         {
-            services.AddDbContext<SurveyApiDbContext>(options => options.UseSqlServer(Configurations.ConnectionString));
+           // services.AddDbContext<SurveyApiDbContext>(options => options.UseSqlServer(Configurations.ConnectionString));
+            services.AddDbContext<SurveyApiDbContext>(options => options.UseNpgsql(Configurations.ConnectionString));
             services.AddScoped<ISurveyReadRepository, SurveyReadRepository>();
             services.AddScoped<ISurveyWriteRepository, SurveyWriteRepository>();
             services.AddScoped<IResponseReadRepository, ResponseReadRepository>();
