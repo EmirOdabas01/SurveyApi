@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,9 @@ namespace SurveyApi.Domain.Entities
 {
     public class Survey : BaseEntity
     {
+        [NotMapped]
+        public override int Id { get => base.Id; set => base.Id = value; }
+        public Guid SurveyId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public DateTime StartDate { get; set; }
@@ -20,7 +24,7 @@ namespace SurveyApi.Domain.Entities
         public ImageFile ImageFile { get; set; }
         public Visibility Visibility { get; set; }
 
-        public Guid VisibilityId { get; set; }
-        public Guid SurveyStatusId { get; set; }
+        public int VisibilityId { get; set; }
+        public int SurveyStatusId { get; set; }
     }
 }

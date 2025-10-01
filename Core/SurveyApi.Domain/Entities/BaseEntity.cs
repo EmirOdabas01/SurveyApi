@@ -8,6 +8,6 @@ namespace SurveyApi.Domain.Entities
 {
     public class BaseEntity
     {
-        public Guid Id { get; set; }
+        virtual public int Id { get; set; }
     }
 }

@@ -8,7 +8,7 @@ namespace SurveyApi.Application.ViewModels.QuestionOption
 {
     public class VM_Update_QuestionOption
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
         public int Order { get; set; }
         public string Value { get; set; }
     }

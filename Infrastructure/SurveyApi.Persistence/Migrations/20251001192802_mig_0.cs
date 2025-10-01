@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -17,7 +18,8 @@ namespace SurveyApi.Persistence.Migrations
                 name: "Groups",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false)
                 },
@@ -30,7 +32,8 @@ namespace SurveyApi.Persistence.Migrations
                 name: "QuestionTypes",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Type = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
@@ -42,7 +45,8 @@ namespace SurveyApi.Persistence.Migrations
                 name: "SurveyStatuses",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     SurveyStatuse = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
@@ -54,7 +58,8 @@ namespace SurveyApi.Persistence.Migrations
                 name: "Visibilities",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     State = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
@@ -66,19 +71,19 @@ namespace SurveyApi.Persistence.Migrations
                 name: "Surveys",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    SurveyId = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
                     StartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     EndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     MinResponse = table.Column<int>(type: "integer", nullable: false),
                     MaxResponse = table.Column<int>(type: "integer", nullable: false),
-                    VisibilityId = table.Column<Guid>(type: "uuid", nullable: false),
-                    SurveyStatusId = table.Column<Guid>(type: "uuid", nullable: false)
+                    VisibilityId = table.Column<int>(type: "integer", nullable: false),
+                    SurveyStatusId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Surveys", x => x.Id);
+                    table.PrimaryKey("PK_Surveys", x => x.SurveyId);
                     table.ForeignKey(
                         name: "FK_Surveys_SurveyStatuses_SurveyStatusId",
                         column: x => x.SurveyStatusId,
@@ -97,18 +102,19 @@ namespace SurveyApi.Persistence.Migrations
                 name: "ImageFile",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    Path = table.Column<string>(type: "text", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Path = table.Column<string>(type: "text", nullable: false),
+                    SurveyId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ImageFile", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ImageFile_Surveys_Id",
-                        column: x => x.Id,
+                        name: "FK_ImageFile_Surveys_SurveyId",
+                        column: x => x.SurveyId,
                         principalTable: "Surveys",
-                        principalColumn: "Id",
+                        principalColumn: "SurveyId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -116,12 +122,13 @@ namespace SurveyApi.Persistence.Migrations
                 name: "Questions",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Order = table.Column<int>(type: "integer", nullable: false),
                     QuestionText = table.Column<string>(type: "text", nullable: false),
                     IsMandatory = table.Column<bool>(type: "boolean", nullable: false),
                     SurveyId = table.Column<Guid>(type: "uuid", nullable: false),
-                    QuestionTypeId = table.Column<Guid>(type: "uuid", nullable: false)
+                    QuestionTypeId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -136,7 +143,7 @@ namespace SurveyApi.Persistence.Migrations
                         name: "FK_Questions_Surveys_SurveyId",
                         column: x => x.SurveyId,
                         principalTable: "Surveys",
-                        principalColumn: "Id",
+                        principalColumn: "SurveyId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -144,7 +151,8 @@ namespace SurveyApi.Persistence.Migrations
                 name: "Responses",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     BeginDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     EndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     SurveyId = table.Column<Guid>(type: "uuid", nullable: false)
@@ -156,7 +164,7 @@ namespace SurveyApi.Persistence.Migrations
                         name: "FK_Responses_Surveys_SurveyId",
                         column: x => x.SurveyId,
                         principalTable: "Surveys",
-                        principalColumn: "Id",
+                        principalColumn: "SurveyId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -164,10 +172,11 @@ namespace SurveyApi.Persistence.Migrations
                 name: "QuestionOptions",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Order = table.Column<int>(type: "integer", nullable: false),
                     Value = table.Column<string>(type: "text", nullable: false),
-                    QuestionId = table.Column<Guid>(type: "uuid", nullable: false)
+                    QuestionId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -184,10 +193,11 @@ namespace SurveyApi.Persistence.Migrations
                 name: "Answers",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     QuestionAnswer = table.Column<string>(type: "text", nullable: true),
-                    QuestionId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ResponseId = table.Column<Guid>(type: "uuid", nullable: false)
+                    QuestionId = table.Column<int>(type: "integer", nullable: false),
+                    ResponseId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -208,9 +218,10 @@ namespace SurveyApi.Persistence.Migrations
                 name: "AnswerOptions",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    QuestionOptionId = table.Column<Guid>(type: "uuid", nullable: false),
-                    AnswerId = table.Column<Guid>(type: "uuid", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    QuestionOptionId = table.Column<int>(type: "integer", nullable: false),
+                    AnswerId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -234,10 +245,10 @@ namespace SurveyApi.Persistence.Migrations
                 columns: new[] { "Id", "Type" },
                 values: new object[,]
                 {
-                    { new Guid("6d7f3e28-1b9c-42a1-8f4a-5c3d7e2f1b66"), "Dropdown" },
-                    { new Guid("a92f1c3d-73b4-40f1-9c88-1e6d5f2c9a11"), "Open" },
-                    { new Guid("b19d5a3c-8c71-4e4f-9d0b-7f13a2e9c8d4"), "Logical" },
-                    { new Guid("f81c7d5a-2e4b-4a9f-97c1-6a2f3e8d9b44"), "Multiple Choice" }
+                    { 1, "Open" },
+                    { 2, "Dropdown" },
+                    { 3, "MultipleChoice" },
+                    { 4, "Logical" }
                 });
 
             migrationBuilder.InsertData(
@@ -245,9 +256,9 @@ namespace SurveyApi.Persistence.Migrations
                 columns: new[] { "Id", "SurveyStatuse" },
                 values: new object[,]
                 {
-                    { new Guid("3b8a4c1b-7f5a-45f3-8cf3-1c6f9e4b9f11"), "Open" },
-                    { new Guid("4c2e9d17-5f88-4a7e-a62e-2a4f0e9d3f72"), "Closed" },
-                    { new Guid("e7d9f8a2-24b1-4e73-9c6d-0e2b3f6a9a55"), "Planned" }
+                    { 1, "Planned" },
+                    { 2, "Open" },
+                    { 3, "Closed" }
                 });
 
             migrationBuilder.InsertData(
@@ -255,9 +266,9 @@ namespace SurveyApi.Persistence.Migrations
                 columns: new[] { "Id", "State" },
                 values: new object[,]
                 {
-                    { new Guid("9a1b2c3d-4e5f-6789-abcd-ef0123456789"), "Users" },
-                    { new Guid("d94f3f01-2c5b-4a6a-8f1b-3b2a1c4d5e6f"), "Groups" },
-                    { new Guid("f47ac10b-58cc-4372-a567-0e02b2c3d479"), "All" }
+                    { 1, "Public" },
+                    { 2, "Group" },
+                    { 3, "Private" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -279,6 +290,12 @@ namespace SurveyApi.Persistence.Migrations
                 name: "IX_Answers_ResponseId",
                 table: "Answers",
                 column: "ResponseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ImageFile_SurveyId",
+                table: "ImageFile",
+                column: "SurveyId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_QuestionOptions_QuestionId",

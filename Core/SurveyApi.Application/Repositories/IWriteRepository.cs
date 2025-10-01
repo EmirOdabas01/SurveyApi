@@ -13,7 +13,7 @@ namespace SurveyApi.Application.Repositories
         Task AddRangeAsync(List<T> models);
         bool Remove(T model);
         void RemoveRange(List<T> models);
-        Task<bool> RemoveAsync(string id);
+        Task<bool> RemoveAsync(int id);
         bool Update(T model);
 
         Task<int> SaveAsync();

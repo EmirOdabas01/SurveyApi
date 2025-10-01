@@ -1,4 +1,5 @@
-﻿using SurveyApi.Application.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using SurveyApi.Application.Repositories;
 using SurveyApi.Domain.Entities;
 using SurveyApi.Persistence.Contexts;
 using System;
@@ -13,6 +14,12 @@ namespace SurveyApi.Persistence.Repositories
     {
         public SurveyWriteRepository(SurveyApiDbContext context) : base(context)
         {
+        }
+
+        public async Task<bool> RemoveAsync(string id)
+        {
+            var entity = await Table.FirstOrDefaultAsync(data => data.SurveyId == Guid.Parse(id));
+            return Remove(entity);
         }
     }
 }

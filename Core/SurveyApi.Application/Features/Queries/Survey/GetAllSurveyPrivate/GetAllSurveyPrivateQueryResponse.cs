@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SurveyApi.Application.Features.Queries.Survey.GetAllSurveyForUsers
+namespace SurveyApi.Application.Features.Queries.Survey.GetAllSurveyPrivateQuery
 {
-    public class GetAllSurveyForUsersQueryResponse
+    public class GetAllSurveyPrivateQueryResponse
     {
         public int Count { get; set; }
         public object Surveys { get; set; }

@@ -8,7 +8,7 @@ namespace SurveyApi.Application.Features.Queries.Survey.GetSurveyByIdDetail
 {
     public class GetSurveyByIdDetailQueryResponse
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public DateTime StartDate { get; set; }

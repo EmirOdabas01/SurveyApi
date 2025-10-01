@@ -31,13 +31,13 @@ namespace SurveyApi.Persistence.Repositories
             return query;
         }
         
-        public async Task<T> GetByIdAsync(string id, bool tracking = true)
+        public async Task<T> GetByIdAsync(int id, bool tracking = true)
         {
             var query = Table.AsQueryable();
 
             if (!tracking)
                 query = Table.AsNoTracking();
-            return await Table.FindAsync(Guid.Parse(id));
+            return await Table.FindAsync(id);
         }
         public async Task<T> GetSingleAsync(Expression<Func<T, bool>> method, bool tracking = true)
         {

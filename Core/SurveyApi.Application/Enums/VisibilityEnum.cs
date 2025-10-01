@@ -1,10 +1,10 @@
 ﻿
 namespace SurveyApi.Application.Enums;
 
-public enum Visibility
+public enum VisibilityStat
     {
-        All,
-        Group,
-        Users,
+        Public = 1,
+        Group = 2,
+        Private = 3,
     }
 

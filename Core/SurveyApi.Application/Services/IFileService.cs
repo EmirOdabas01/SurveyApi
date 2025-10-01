@@ -9,7 +9,7 @@ namespace SurveyApi.Application.Services
 {
     public interface IFileService
     {
-        Task<(string fileName, string path)> UploadAsync(string path, IFormFileCollection file, string surveyId);
+        Task<string> UploadAsync(string path, IFormFileCollection file, string surveyId);
         Task<bool> CopyFileAsync(string path, IFormFile file);
     }
 }

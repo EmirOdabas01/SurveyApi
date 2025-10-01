@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using SurveyApi.Application.Enums;
 using SurveyApi.Application.Repositories;
 using SurveyApi.Domain.Entities;
 using System;
@@ -27,8 +28,7 @@ namespace SurveyApi.Application.Features.Commands.Survey.RemoveSurvey
 
         public async Task<RemoveSurveyCommandResponse> Handle(RemoveSurveyCommandRequest request, CancellationToken cancellationToken)
         {
-            Guid Id = Guid.Parse(request.Id);
-            var survey = await _surveyReadRepository.GetWhere(s => s.Id == Id)
+            var survey = await _surveyReadRepository.GetWhere(s => s.SurveyId == Guid.Parse(request.Id))
                 .Include(s => s.SurveyStatus)
                 .Include(s => s.Questions)
                 .ThenInclude(q => q.Answers)
@@ -38,7 +38,7 @@ namespace SurveyApi.Application.Features.Commands.Survey.RemoveSurvey
             if(survey == null)
                 throw new Exception();
             
-            if (survey.SurveyStatus.SurveyStatuse != "Planned")
+            if (survey.SurveyStatus.SurveyStatuse != Status.Planned.ToString())
             {
                 var questions = survey.Questions.ToList();
 

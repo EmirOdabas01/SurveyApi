@@ -9,5 +9,6 @@ namespace SurveyApi.Application.Repositories
 {
     public interface ISurveyWriteRepository : IWriteRepository<Survey>
     {
+       Task<bool> RemoveAsync(string id);
     }
 }

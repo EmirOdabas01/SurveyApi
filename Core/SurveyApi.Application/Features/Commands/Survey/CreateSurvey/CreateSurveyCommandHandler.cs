@@ -27,9 +27,7 @@ namespace SurveyApi.Application.Features.Commands.Survey.CreateSurvey
                 MaxResponse = request.MaxResponse,
                 StartDate = request.StartDate,
                 EndDate = request.EndDate,
-                VisibilityId = Guid.Parse(request.VisibilityId),
-                SurveyStatusId = Guid.Parse(request.SurveyStatusId),
-                //userId
+                VisibilityId = Convert.ToInt32(request.Visibility),
             });
 
             await _surveyWriteRepository.SaveAsync();

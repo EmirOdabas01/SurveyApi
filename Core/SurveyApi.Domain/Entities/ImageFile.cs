@@ -8,9 +8,8 @@ namespace SurveyApi.Domain.Entities
 {
     public class ImageFile : BaseEntity
     {
-        public string Name { get; set; }
         public string Path { get; set; }
-
+        public Guid SurveyId { get; set; }
         public Survey Survey { get; set; }
     }
 }

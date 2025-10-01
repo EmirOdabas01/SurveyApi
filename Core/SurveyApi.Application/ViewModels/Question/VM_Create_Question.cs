@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SurveyApi.Application.Enums;
+using SurveyApi.Application.ViewModels.QuestionOption;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,8 +12,9 @@ namespace SurveyApi.Application.ViewModels.Question
     {
         public int Order { get; set; }
         public string QuestionText { get; set; }
-        public bool IsMandatory { get; set; }
-        public string SurveyId { get; set; }
-        public string QuestionTypeId { get; set; }
+        public bool IsMandatory { get; set; } 
+        public QuestType QuestionType { get; set; }
+
+        public List<VM_Create_QuestionOption>? QuestionOptions { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using SurveyApi.Application.Enums;
 using SurveyApi.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -27,6 +28,9 @@ namespace SurveyApi.Persistence.Contexts
         public DbSet<Visibility> Visibilities { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Survey>()
+                .HasKey(s => s.SurveyId);
+
             modelBuilder.Entity<SurveyStatus>()
                 .HasMany(st => st.Surveys)
                 .WithOne(s => s.SurveyStatus)
@@ -90,13 +94,13 @@ namespace SurveyApi.Persistence.Contexts
                 .IsRequired(true)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<ImageFile>()
-                .HasKey(ı => ı.Id);
+            //modelBuilder.Entity<ImageFile>()
+            //    .HasKey(ı => ı.Id);
 
             modelBuilder.Entity<ImageFile>()
                 .HasOne(ı => ı.Survey)
                 .WithOne(s => s.ImageFile)
-                .HasForeignKey<ImageFile>(ı => ı.Id);
+                .HasForeignKey<ImageFile>(ı => ı.SurveyId);
 
             modelBuilder.Entity<Visibility>()
                 .HasMany(v => v.Surveys)
@@ -107,24 +111,24 @@ namespace SurveyApi.Persistence.Contexts
 
             modelBuilder.Entity<SurveyStatus>()
                 .HasData(
-                new { Id = Guid.Parse("e7d9f8a2-24b1-4e73-9c6d-0e2b3f6a9a55"), SurveyStatuse = "Planned" },
-                new { Id = Guid.Parse("3b8a4c1b-7f5a-45f3-8cf3-1c6f9e4b9f11"), SurveyStatuse = "Open" },
-                new { Id = Guid.Parse("4c2e9d17-5f88-4a7e-a62e-2a4f0e9d3f72"), SurveyStatuse = "Closed" }
+                new { Id = Convert.ToInt32(Status.Planned), SurveyStatuse = Status.Planned.ToString() },
+                new { Id = Convert.ToInt32(Status.Open), SurveyStatuse = Status.Open.ToString() },
+                new { Id = Convert.ToInt32(Status.Closed), SurveyStatuse = Status.Closed.ToString()}
                 );
 
             modelBuilder.Entity<QuestionType>()
                 .HasData(
-                new { Id = Guid.Parse("a92f1c3d-73b4-40f1-9c88-1e6d5f2c9a11"), Type = "Open" },
-                new { Id = Guid.Parse("6d7f3e28-1b9c-42a1-8f4a-5c3d7e2f1b66"), Type = "Dropdown" },
-                new { Id = Guid.Parse("f81c7d5a-2e4b-4a9f-97c1-6a2f3e8d9b44"), Type = "Multiple Choice" },
-                new { Id = Guid.Parse("b19d5a3c-8c71-4e4f-9d0b-7f13a2e9c8d4"), Type = "Logical" }
+                new { Id = Convert.ToInt32(QuestType.Open), Type = QuestType.Open.ToString() },
+                new { Id = Convert.ToInt32(QuestType.Dropdown), Type = QuestType.Dropdown.ToString() },
+                new { Id = Convert.ToInt32(QuestType.MultipleChoice), Type = QuestType.MultipleChoice.ToString()},
+                new { Id = Convert.ToInt32(QuestType.Logical), Type = QuestType.Logical.ToString() }
                 );
 
             modelBuilder.Entity<Visibility>()
                 .HasData(
-                new {Id = Guid.Parse("f47ac10b-58cc-4372-a567-0e02b2c3d479"), State = "All"},
-                new {Id = Guid.Parse("9a1b2c3d-4e5f-6789-abcd-ef0123456789"), State = "Users"},
-                new {Id = Guid.Parse("d94f3f01-2c5b-4a6a-8f1b-3b2a1c4d5e6f"), State = "Groups"}
+                new {Id = Convert.ToInt32(VisibilityStat.Public), State = VisibilityStat.Public.ToString()},
+                new {Id = Convert.ToInt32(VisibilityStat.Group), State = VisibilityStat.Group.ToString()},
+                new {Id = Convert.ToInt32(VisibilityStat.Private), State = VisibilityStat.Private.ToString()}
                 );
         }
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
@@ -135,7 +139,7 @@ namespace SurveyApi.Persistence.Contexts
             {
                 if(data.State == EntityState.Added)
                 {
-                    data.Entity.SurveyStatusId = Guid.Parse("e7d9f8a2-24b1-4e73-9c6d-0e2b3f6a9a55");
+                    data.Entity.SurveyStatusId = Convert.ToInt32(Status.Planned);
                 }
             }
 

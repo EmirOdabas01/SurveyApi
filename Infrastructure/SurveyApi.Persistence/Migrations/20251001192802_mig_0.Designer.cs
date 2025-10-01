@@ -12,7 +12,7 @@ using SurveyApi.Persistence.Contexts;
 namespace SurveyApi.Persistence.Migrations
 {
     [DbContext(typeof(SurveyApiDbContext))]
-    [Migration("20250930125438_mig_0")]
+    [Migration("20251001192802_mig_0")]
     partial class mig_0
     {
         /// <inheritdoc />
@@ -27,18 +27,20 @@ namespace SurveyApi.Persistence.Migrations
 
             modelBuilder.Entity("SurveyApi.Domain.Entities.Answer", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("QuestionAnswer")
                         .HasColumnType("text");
 
-                    b.Property<Guid>("QuestionId")
-                        .HasColumnType("uuid");
+                    b.Property<int>("QuestionId")
+                        .HasColumnType("integer");
 
-                    b.Property<Guid>("ResponseId")
-                        .HasColumnType("uuid");
+                    b.Property<int>("ResponseId")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -51,15 +53,17 @@ namespace SurveyApi.Persistence.Migrations
 
             modelBuilder.Entity("SurveyApi.Domain.Entities.AnswerOption", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer");
 
-                    b.Property<Guid>("AnswerId")
-                        .HasColumnType("uuid");
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<Guid>("QuestionOptionId")
-                        .HasColumnType("uuid");
+                    b.Property<int>("AnswerId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("QuestionOptionId")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -72,9 +76,11 @@ namespace SurveyApi.Persistence.Migrations
 
             modelBuilder.Entity("SurveyApi.Domain.Entities.Group", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -91,27 +97,34 @@ namespace SurveyApi.Persistence.Migrations
 
             modelBuilder.Entity("SurveyApi.Domain.Entities.ImageFile", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Path")
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<Guid>("SurveyId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("SurveyId")
+                        .IsUnique();
 
                     b.ToTable("ImageFile");
                 });
 
             modelBuilder.Entity("SurveyApi.Domain.Entities.Question", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("IsMandatory")
                         .HasColumnType("boolean");
@@ -123,8 +136,8 @@ namespace SurveyApi.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid>("QuestionTypeId")
-                        .HasColumnType("uuid");
+                    b.Property<int>("QuestionTypeId")
+                        .HasColumnType("integer");
 
                     b.Property<Guid>("SurveyId")
                         .HasColumnType("uuid");
@@ -140,15 +153,17 @@ namespace SurveyApi.Persistence.Migrations
 
             modelBuilder.Entity("SurveyApi.Domain.Entities.QuestionOption", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("Order")
                         .HasColumnType("integer");
 
-                    b.Property<Guid>("QuestionId")
-                        .HasColumnType("uuid");
+                    b.Property<int>("QuestionId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Value")
                         .IsRequired()
@@ -163,9 +178,11 @@ namespace SurveyApi.Persistence.Migrations
 
             modelBuilder.Entity("SurveyApi.Domain.Entities.QuestionType", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -178,31 +195,33 @@ namespace SurveyApi.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("a92f1c3d-73b4-40f1-9c88-1e6d5f2c9a11"),
+                            Id = 1,
                             Type = "Open"
                         },
                         new
                         {
-                            Id = new Guid("6d7f3e28-1b9c-42a1-8f4a-5c3d7e2f1b66"),
+                            Id = 2,
                             Type = "Dropdown"
                         },
                         new
                         {
-                            Id = new Guid("f81c7d5a-2e4b-4a9f-97c1-6a2f3e8d9b44"),
-                            Type = "Multiple Choice"
+                            Id = 3,
+                            Type = "MultipleChoice"
                         },
                         new
                         {
-                            Id = new Guid("b19d5a3c-8c71-4e4f-9d0b-7f13a2e9c8d4"),
+                            Id = 4,
                             Type = "Logical"
                         });
                 });
 
             modelBuilder.Entity("SurveyApi.Domain.Entities.Response", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("BeginDate")
                         .HasColumnType("timestamp with time zone");
@@ -222,7 +241,7 @@ namespace SurveyApi.Persistence.Migrations
 
             modelBuilder.Entity("SurveyApi.Domain.Entities.Survey", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("SurveyId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
@@ -246,13 +265,13 @@ namespace SurveyApi.Persistence.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("SurveyStatusId")
-                        .HasColumnType("uuid");
+                    b.Property<int>("SurveyStatusId")
+                        .HasColumnType("integer");
 
-                    b.Property<Guid>("VisibilityId")
-                        .HasColumnType("uuid");
+                    b.Property<int>("VisibilityId")
+                        .HasColumnType("integer");
 
-                    b.HasKey("Id");
+                    b.HasKey("SurveyId");
 
                     b.HasIndex("SurveyStatusId");
 
@@ -263,9 +282,11 @@ namespace SurveyApi.Persistence.Migrations
 
             modelBuilder.Entity("SurveyApi.Domain.Entities.SurveyStatus", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("SurveyStatuse")
                         .IsRequired()
@@ -278,26 +299,28 @@ namespace SurveyApi.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("e7d9f8a2-24b1-4e73-9c6d-0e2b3f6a9a55"),
+                            Id = 1,
                             SurveyStatuse = "Planned"
                         },
                         new
                         {
-                            Id = new Guid("3b8a4c1b-7f5a-45f3-8cf3-1c6f9e4b9f11"),
+                            Id = 2,
                             SurveyStatuse = "Open"
                         },
                         new
                         {
-                            Id = new Guid("4c2e9d17-5f88-4a7e-a62e-2a4f0e9d3f72"),
+                            Id = 3,
                             SurveyStatuse = "Closed"
                         });
                 });
 
             modelBuilder.Entity("SurveyApi.Domain.Entities.Visibility", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("State")
                         .IsRequired()
@@ -310,18 +333,18 @@ namespace SurveyApi.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("f47ac10b-58cc-4372-a567-0e02b2c3d479"),
-                            State = "All"
+                            Id = 1,
+                            State = "Public"
                         },
                         new
                         {
-                            Id = new Guid("9a1b2c3d-4e5f-6789-abcd-ef0123456789"),
-                            State = "Users"
+                            Id = 2,
+                            State = "Group"
                         },
                         new
                         {
-                            Id = new Guid("d94f3f01-2c5b-4a6a-8f1b-3b2a1c4d5e6f"),
-                            State = "Groups"
+                            Id = 3,
+                            State = "Private"
                         });
                 });
 
@@ -367,7 +390,7 @@ namespace SurveyApi.Persistence.Migrations
                 {
                     b.HasOne("SurveyApi.Domain.Entities.Survey", "Survey")
                         .WithOne("ImageFile")
-                        .HasForeignKey("SurveyApi.Domain.Entities.ImageFile", "Id")
+                        .HasForeignKey("SurveyApi.Domain.Entities.ImageFile", "SurveyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

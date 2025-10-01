@@ -26,7 +26,7 @@ namespace SurveyApi.Application.Features.Queries.Survey.GetSurveyById
 
             return new()
             {
-                Id = survey.Id,
+                Id = survey.SurveyId.ToString(),
                 Name = survey.Name,
                 Description = survey.Description,
             };

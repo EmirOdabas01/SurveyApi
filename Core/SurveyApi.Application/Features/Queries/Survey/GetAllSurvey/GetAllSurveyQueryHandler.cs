@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using SurveyApi.Application.Enums;
 using SurveyApi.Application.Repositories;
 using System;
 using System.Collections.Generic;
@@ -21,11 +22,11 @@ namespace SurveyApi.Application.Features.Queries.Survey.GetAllSurvey
         public async Task<GetAllSurveyQueryResponse> Handle(GetAllSurveyQueryRequest request, CancellationToken cancellationToken)
         {
             var surveys =  _surveyReadRepository.GetAll(false)
-                .Where(s => s.Visibility.State == "All" && s.SurveyStatus.SurveyStatuse == "Planned")
+                .Where(s => s.Visibility.State == VisibilityStat.Public.ToString() && s.SurveyStatus.SurveyStatuse == Status.Open.ToString())
                 .Skip(request.Size * request.Page)
                 .Take(request.Size)
                 .Select(s => new {
-                Id = s.Id,
+                Id = s.SurveyId,
                 Name = s.Name,
                 Description = s.Description,
                 }).ToList();

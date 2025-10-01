@@ -11,7 +11,7 @@ namespace SurveyApi.Domain.Entities
         public QuestionOption QuestionOption { get; set; }
         public Answer Answer { get; set; }
 
-        public Guid QuestionOptionId { get; set; }
-        public Guid AnswerId { get; set; }
+        public int QuestionOptionId { get; set; }
+        public int AnswerId { get; set; }
     }
 }

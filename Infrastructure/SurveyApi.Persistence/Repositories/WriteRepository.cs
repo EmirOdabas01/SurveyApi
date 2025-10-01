@@ -39,9 +39,9 @@ namespace SurveyApi.Persistence.Repositories
             return entityEntry.State == EntityState.Deleted;
         }
 
-        public async Task<bool> RemoveAsync(string id)
+        public async Task<bool> RemoveAsync(int id)
         {
-            var entity = await Table.FirstOrDefaultAsync(data => data.Id == Guid.Parse(id));
+            var entity = await Table.FirstOrDefaultAsync(data => data.Id == id);
             return Remove(entity);
         }
 

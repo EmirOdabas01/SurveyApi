@@ -18,7 +18,6 @@ namespace SurveyApi.Application.Features.Commands.Survey.CreateSurvey
         public int MinResponse { get; set; }
         public int MaxResponse { get; set; }
 
-        public string SurveyStatusId { get; set; }
-        public string VisibilityId { get; set; }
+        public VisibilityStat Visibility { get; set; }
     }
 }

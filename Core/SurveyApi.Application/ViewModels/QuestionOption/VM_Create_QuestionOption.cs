@@ -10,6 +10,5 @@ namespace SurveyApi.Application.ViewModels.QuestionOption
     {
         public int Order { get; set; }
         public string Value { get; set; }
-        public string QuestionId { get; set; }
     }
 }
