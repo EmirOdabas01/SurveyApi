@@ -28,7 +28,7 @@ namespace SurveyApi.Application.Features.Commands.Question.UpdateQuestions
 
             if(survey == null)
                     throw new Exception();
-            else if(survey.SurveyStatus.SurveyStatuse != Status.Planned.ToString())
+            else if(survey.SurveyStatusId != Convert.ToInt32(Status.Planned))
                 throw new Exception();
 
 
@@ -38,8 +38,6 @@ namespace SurveyApi.Application.Features.Commands.Question.UpdateQuestions
                     updated.QuestionText = question.QuestionText;
                     updated.Order = question.Order;
                     updated.IsMandatory = question.IsMandatory;
-
-
                     updated.QuestionOptions = question.QuestionOptions.Select(q => new Domain.Entities.QuestionOption
                     {
                         Id = q.Id,
