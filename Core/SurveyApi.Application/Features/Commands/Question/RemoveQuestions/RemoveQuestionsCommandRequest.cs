@@ -1,0 +1,14 @@
+﻿using MediatR;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace SurveyApi.Application.Features.Commands.Question.DeleteQuestions
+{
+    public class RemoveQuestionsCommandRequest : IRequest<RemoveQuestionsCommandResponse>
+    {
+      public string Id { get; set; }
+    }
+}

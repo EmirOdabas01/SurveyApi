@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SurveyApi.Application.Features.Commands.Question.CreateQuestions;
+using SurveyApi.Application.Features.Commands.Question.DeleteQuestions;
 using SurveyApi.Application.Features.Commands.Question.UpdateQuestions;
 using SurveyApi.Application.Features.Queries.Question.GetAllQuestions;
 
@@ -37,6 +38,13 @@ namespace SurveyApi.Api.Controllers
         {
             var reponse = await _mediator.Send(updateQuestionsCommandRequest);
             return Ok(reponse);
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> RemoveSurveyQuestions([FromQuery] RemoveQuestionsCommandRequest removeQuestionsCommandRequest)
+        {
+            var response = await _mediator.Send(removeQuestionsCommandRequest);
+            return Ok(response);
         }
     }
 }

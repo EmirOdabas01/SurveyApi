@@ -4,11 +4,13 @@ using Microsoft.AspNetCore.Mvc;
 using SurveyApi.Application.Features.Commands.Survey.CreateSurvey;
 using SurveyApi.Application.Features.Commands.Survey.RemoveSurvey;
 using SurveyApi.Application.Features.Commands.Survey.UpdateSurvey;
+using SurveyApi.Application.Features.Commands.SurveyImage.RemoveSurveyImage;
 using SurveyApi.Application.Features.Commands.SurveyImage.UploadSurveyImage;
 using SurveyApi.Application.Features.Queries.Survey.GetAllSurvey;
 using SurveyApi.Application.Features.Queries.Survey.GetAllSurveyPrivateQuery;
 using SurveyApi.Application.Features.Queries.Survey.GetSurveyById;
 using SurveyApi.Application.Features.Queries.Survey.GetSurveyByIdDetail;
+using SurveyApi.Application.Features.Queries.SurveyImage.GetSurveyImage;
 using SurveyApi.Application.Repositories;
 using SurveyApi.Application.RequestParameters;
 using SurveyApi.Application.Services;
@@ -86,9 +88,17 @@ namespace SurveyApi.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetSurveyImage()
+        public async Task<IActionResult> GetSurveyImage([FromQuery] GetSurveyImageQueryRequest getSurveyImageQueryRequest)
         {
-            return null;
+            var response = await _mediator.Send(getSurveyImageQueryRequest);
+            return Ok(response);
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> RemoveSurveyImage([FromQuery] RemoveSurveyIMageCommandRequest removeSurveyIMageCommandRequest)
+        {
+            var response = await _mediator.Send(removeSurveyIMageCommandRequest);
+            return Ok(response);
         }
     }
 }

@@ -36,7 +36,7 @@ namespace SurveyApi.Infrastructure.Services
 
       
 
-        public async Task<string> UploadAsync(string path, IFormFileCollection file, string surveyId)
+        public async Task<(string path, string fileName)> UploadAsync(string path, IFormFileCollection file, string surveyId)
         {
             string uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, path); 
 
@@ -49,9 +49,9 @@ namespace SurveyApi.Infrastructure.Services
             result = await CopyFileAsync($"{uploadPath}\\{surveyId}{Path.GetExtension(file[0].FileName)}", file[0]);
 
             if(result)
-                return (path);
+                return (path, $"{surveyId}{Path.GetExtension(file[0].FileName)}");
 
-            return null;
+            return ("", "s");
         }
     }
 }

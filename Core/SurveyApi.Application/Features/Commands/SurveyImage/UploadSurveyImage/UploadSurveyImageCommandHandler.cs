@@ -35,7 +35,8 @@ namespace SurveyApi.Application.Features.Commands.SurveyImage.UploadSurveyImage
             await _ımageFileWriteRepository.AddAsync(new Domain.Entities.ImageFile
             {
                 SurveyId = Guid.Parse(request.Id),
-                Path = result
+                Path = result.path,
+                FileName = result.fileName
             });
 
             await _ımageFileWriteRepository.SaveAsync();
