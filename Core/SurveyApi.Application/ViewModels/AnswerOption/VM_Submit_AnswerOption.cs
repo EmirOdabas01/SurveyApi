@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace SurveyApi.Application.ViewModels.AnswerOption
 {
-    public class VM_Create_AnswerOption
+    public class VM_Submit_AnswerOption
     {
-        public string QuestionOptionId { get; set; }
-        public string AnswerId { get; set; }
+        public int QuestionOptionId { get; set; }
     }
 }
