@@ -24,7 +24,7 @@ namespace SurveyApi.Application.Features.Commands.SurveyImage.RemoveSurveyImage
             var imageFile = await _ımageFileReadRepository.GetByIdAsync(request.Id);
             
             if(imageFile != null)
-            await _ımageFileWriteRepository.RemoveAsync(request.Id);
+               await _ımageFileWriteRepository.RemoveAsync(request.Id);
 
             return new();
         }

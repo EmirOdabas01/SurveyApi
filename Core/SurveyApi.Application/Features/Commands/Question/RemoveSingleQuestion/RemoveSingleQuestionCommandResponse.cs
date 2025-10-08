@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SurveyApi.Application.Features.Commands.Question.RemoveSingleQuestion
 {
-    internal class RemoveSingleQuestionCommandResponse
+    public class RemoveSingleQuestionCommandResponse
     {
     }
 }
