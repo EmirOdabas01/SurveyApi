@@ -11,7 +11,7 @@ namespace SurveyApi.Application.ViewModels.Answer
     public class VM_Submit_Answer
     {
         public string? QuestionAnswer { get; set; }
-        public string QuestionId { get; set; }
+        public int QuestionId { get; set; }
         public List<int>? QuestionOptionsIds { get; set; }
     }
 }

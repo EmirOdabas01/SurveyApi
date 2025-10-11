@@ -15,18 +15,16 @@ namespace SurveyApi.Application.Features.Commands.Answers
     {
         private readonly IResponseReadRepository _responseReadRepository;
         private readonly IResponseWriteRepository _responseWriteRepository;
-        private readonly IQuestionReadRepository _questionReadRepository;
-        private readonly IQuestionWriteRepository _questionWriteRepository;
+       
         public SubmitAnswersCommandHandler( 
             IResponseReadRepository responseReadRepository,
-            IResponseWriteRepository responseWriteRepository,
-            IQuestionReadRepository questionReadRepository,
-            IQuestionWriteRepository questionWriteRepository)
+            IResponseWriteRepository responseWriteRepository
+             )
         {
-            _questionReadRepository = questionReadRepository;
+           
             _responseReadRepository = responseReadRepository;
             _responseWriteRepository = responseWriteRepository;
-            _questionWriteRepository = questionWriteRepository;
+          
         }
 
         public async Task<SubmitAnswersCommandResponse> Handle(SubmitAnswersCommandRequest request, CancellationToken cancellationToken)
@@ -55,19 +53,12 @@ namespace SurveyApi.Application.Features.Commands.Answers
                 answers.Add(new SurveyApi.Domain.Entities.Answer
                 {
                     QuestionAnswer = answer.QuestionAnswer,
+                    QuestionId = answer.QuestionId,
                     AnswerOptions = answerOptions
                 });
             }
 
             response.Answers = answers;
-            var question = await _questionReadRepository.GetByIdAsync(request.QuestionId);
-
-            if (question == null)
-                throw new Exception();
-
-            question.Answers = answers;
-
-            await _questionWriteRepository.SaveAsync();
             await _responseWriteRepository.SaveAsync();
 
             return new();

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SurveyApi.Domain.Entities.Identity;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -23,7 +24,8 @@ namespace SurveyApi.Domain.Entities
         public ICollection<Response> Responses { get; set; } 
         public ImageFile ImageFile { get; set; }
         public Visibility Visibility { get; set; }
-
+        public User User { get; set; }
+        public string UserId { get; set; }
         public int VisibilityId { get; set; }
         public int SurveyStatusId { get; set; }
     }

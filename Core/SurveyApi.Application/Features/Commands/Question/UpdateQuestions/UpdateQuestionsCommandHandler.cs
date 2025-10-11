@@ -24,9 +24,10 @@ namespace SurveyApi.Application.Features.Commands.Question.UpdateQuestions
         }
         public async Task<UpdateQuestionsCommandResponse> Handle(UpdateQuestionsCommandRequest request, CancellationToken cancellationToken)
         {
-            var survey = await _surveyReadRepository.GetByIdAsync(request.SurveyId, false);
+            var survey = await _surveyReadRepository.GetByIdAsync(request.SurveyId, true);
 
-            if(survey == null || survey.SurveyStatusId != Convert.ToInt32(Status.Planned))
+            if (survey == null || survey.SurveyStatusId != Convert.ToInt32(Status.Planned))
+                throw new Exception();
                  
             foreach (var question in request.Questions)
                 {
@@ -40,9 +41,9 @@ namespace SurveyApi.Application.Features.Commands.Question.UpdateQuestions
                         Order = q.Order,
                         Value = q.Value
                     }).ToList();
+            await _questionWriteRepository.SaveAsync();
                 }
 
-            await _questionWriteRepository.SaveAsync();
             return new();
         }
     }

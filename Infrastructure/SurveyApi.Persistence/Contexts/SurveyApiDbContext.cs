@@ -1,7 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using SurveyApi.Application.Enums;
 using SurveyApi.Domain.Entities;
+using SurveyApi.Domain.Entities.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 namespace SurveyApi.Persistence.Contexts
 {
-    public class SurveyApiDbContext : DbContext
+    public class SurveyApiDbContext : IdentityDbContext<User, Role, string>
     {
         public SurveyApiDbContext(DbContextOptions options) : base(options)
         {
@@ -28,6 +30,8 @@ namespace SurveyApi.Persistence.Contexts
         public DbSet<Visibility> Visibilities { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<Survey>()
                 .HasKey(s => s.SurveyId);
 

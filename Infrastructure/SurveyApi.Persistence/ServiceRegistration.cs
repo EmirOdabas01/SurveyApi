@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Npgsql.EntityFrameworkCore;
+using SurveyApi.Domain.Entities.Identity;
 namespace SurveyApi.Persistence
 {
     public static class ServiceRegistration
@@ -19,6 +20,7 @@ namespace SurveyApi.Persistence
         {
            // services.AddDbContext<SurveyApiDbContext>(options => options.UseSqlServer(Configurations.ConnectionString));
             services.AddDbContext<SurveyApiDbContext>(options => options.UseNpgsql(Configurations.ConnectionString));
+            services.AddIdentity<User, Role>().AddEntityFrameworkStores<SurveyApiDbContext>();
             services.AddScoped<ISurveyReadRepository, SurveyReadRepository>();
             services.AddScoped<ISurveyWriteRepository, SurveyWriteRepository>();
             services.AddScoped<IResponseReadRepository, ResponseReadRepository>();
