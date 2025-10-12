@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using SurveyApi.Application.Abstractions;
 using SurveyApi.Application.Services;
 using SurveyApi.Infrastructure.Services;
 using System;
@@ -14,6 +15,7 @@ namespace SurveyApi.Infrastructure
         public static void AddInfrastructureServices(this IServiceCollection services)
         {
             services.AddScoped<IFileService, FileService>();
+            services.AddScoped<ITokenHandler, TokenHandler>();
         }
     }
 }

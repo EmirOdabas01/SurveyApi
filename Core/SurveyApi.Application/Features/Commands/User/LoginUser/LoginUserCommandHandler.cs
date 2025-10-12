@@ -1,5 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
+using SurveyApi.Application.Abstractions;
+using SurveyApi.Application.DTOs;
 using SurveyApi.Application.Exceptions;
 using System;
 using System.Collections.Generic;
@@ -13,12 +15,14 @@ namespace SurveyApi.Application.Features.Commands.User.LoginUser
     {
         private readonly UserManager<Identity.User> _userManager;
         private readonly SignInManager<Identity.User> _signInManager;
-
+        private readonly ITokenHandler _tokenHandler;
         public LoginUserCommandHandler(SignInManager<Identity.User> signInManager,
-            UserManager<Identity.User> userManager)
+            UserManager<Identity.User> userManager,
+            ITokenHandler tokenHandler)
         {
             _signInManager = signInManager;
             _userManager = userManager;
+            _tokenHandler = tokenHandler;
         }
 
         public async Task<LoginUserCommandResponse> Handle(LoginUserCommandRequest request, CancellationToken cancellationToken)
@@ -35,9 +39,14 @@ namespace SurveyApi.Application.Features.Commands.User.LoginUser
 
             if(result.Succeeded)
             {
-
+                var token = _tokenHandler.AccessToken(20);
+                return new LoginUserSuccessResponse()
+                {
+                    AccessToken = token
+                };
             }
-            return new();
+
+            throw new AuthenticationErrorException();
         }
     }
 }
