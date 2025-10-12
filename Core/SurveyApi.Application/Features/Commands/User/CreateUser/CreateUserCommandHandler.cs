@@ -24,6 +24,7 @@ namespace SurveyApi.Application.Features.Commands.User.CreateUser
                 Id = Guid.NewGuid().ToString(),
                 NameSurname = request.NameSurname,
                 UserName = request.UserName,
+                Email = request.EMail
             }, request.Password);
 
             CreateUserCommandResponse response = new() { Succeeded = result.Succeeded};
