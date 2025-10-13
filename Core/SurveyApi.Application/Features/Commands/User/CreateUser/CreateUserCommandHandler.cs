@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
+using SurveyApi.Application.Abstractions.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,32 +11,29 @@ namespace SurveyApi.Application.Features.Commands.User.CreateUser
 {
     public class CreateUserCommandHandler : IRequestHandler<CreateUserCommandRequest, CreateUserCommandResponse>
     {
-        private readonly UserManager<Identity.User> _userManager;
+        private readonly IUserService _userService;
 
-        public CreateUserCommandHandler(UserManager<Identity.User> userManager)
+        public CreateUserCommandHandler(IUserService userService)
         {
-            _userManager = userManager;
+            _userService = userService;
         }
 
         public async Task<CreateUserCommandResponse> Handle(CreateUserCommandRequest request, CancellationToken cancellationToken)
         {
-            IdentityResult result = await _userManager.CreateAsync(new Identity.User
+            var response = await _userService.CreateAsync(new()
             {
-                Id = Guid.NewGuid().ToString(),
                 NameSurname = request.NameSurname,
                 UserName = request.UserName,
-                Email = request.EMail
-            }, request.Password);
+                EMail = request.EMail,
+                Password = request.Password,
+                PasswordConfirm = request.PasswordConfirm
+            });
 
-            CreateUserCommandResponse response = new() { Succeeded = result.Succeeded};
-
-            if(response.Succeeded)
-                response.Message = "New user created successfully";
-            else
-                foreach (var error in result.Errors)
-                    response.Message += $"{error.Code} : {error.Description}\n";
-
-            return response;
+            return new()
+            {
+                Succeeded = response.Succeeded,
+                Message = response.Message
+            };
         }
     }
 }

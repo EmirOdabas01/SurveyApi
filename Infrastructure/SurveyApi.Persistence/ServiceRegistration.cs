@@ -4,10 +4,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Protocols;
 using Npgsql.EntityFrameworkCore;
+using SurveyApi.Application.Abstractions.Services;
 using SurveyApi.Application.Repositories;
 using SurveyApi.Domain.Entities.Identity;
 using SurveyApi.Persistence.Contexts;
 using SurveyApi.Persistence.Repositories;
+using SurveyApi.Persistence.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,6 +47,9 @@ namespace SurveyApi.Persistence
             services.AddScoped<IAnswerWriteRepository, AnswerWriteRepository>();
             services.AddScoped<IImageFileReadRepository, ImageFileReadRepository>();
             services.AddScoped<IImageFileWriteRepository, ImageFileWriteRepository>();
+
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAuthService, AuthService>();
         }
     }
 }

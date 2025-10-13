@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
 using SurveyApi.Application.Abstractions;
+using SurveyApi.Application.Abstractions.Services;
 using SurveyApi.Application.DTOs;
 using SurveyApi.Application.Exceptions;
 using System;
@@ -13,40 +14,17 @@ namespace SurveyApi.Application.Features.Commands.User.LoginUser
 {
     public class LoginUserCommandHandler : IRequestHandler<LoginUserCommandRequest, LoginUserCommandResponse>
     {
-        private readonly UserManager<Identity.User> _userManager;
-        private readonly SignInManager<Identity.User> _signInManager;
-        private readonly ITokenHandler _tokenHandler;
-        public LoginUserCommandHandler(SignInManager<Identity.User> signInManager,
-            UserManager<Identity.User> userManager,
-            ITokenHandler tokenHandler)
+        private readonly IAuthService _authService;
+
+        public LoginUserCommandHandler(IAuthService authService)
         {
-            _signInManager = signInManager;
-            _userManager = userManager;
-            _tokenHandler = tokenHandler;
+            _authService = authService;
         }
 
         public async Task<LoginUserCommandResponse> Handle(LoginUserCommandRequest request, CancellationToken cancellationToken)
         {
-            var user = await _userManager.FindByNameAsync(request.NameOrEmail);
-
-            if (user == null)
-                user = await _userManager.FindByEmailAsync(request.NameOrEmail);
-
-            if (user == null)
-                throw new UserNotFoundException();
-
-            var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
-
-            if(result.Succeeded)
-            {
-                var token = _tokenHandler.AccessToken(20);
-                return new LoginUserSuccessResponse()
-                {
-                    AccessToken = token
-                };
-            }
-
-            throw new AuthenticationErrorException();
+            var response = await _authService.LoginAsync(request.NameOrEmail, request.Password, 20);
+            return new LoginUserSuccessResponse() { AccessToken = response };
         }
     }
 }
