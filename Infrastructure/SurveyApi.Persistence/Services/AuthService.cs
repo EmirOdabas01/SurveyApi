@@ -1,5 +1,6 @@
 ﻿using Azure.Core;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using SurveyApi.Application.Abstractions;
 using SurveyApi.Application.Abstractions.Services;
 using SurveyApi.Application.DTOs;
@@ -19,13 +20,16 @@ namespace SurveyApi.Persistence.Services
         private readonly UserManager<Identity.User> _userManager;
         private readonly SignInManager<Identity.User> _signInManager;
         private readonly ITokenHandler _tokenHandler;
+        private readonly IUserService _userService;
         public AuthService(SignInManager<Identity.User> signInManager,
             UserManager<Identity.User> userManager,
-            ITokenHandler tokenHandler)
+            ITokenHandler tokenHandler,
+            IUserService userService)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _tokenHandler = tokenHandler;
+            _userService = userService;
         }
         public async Task<Token> LoginAsync(string nameOrEmail, string password, int tokenLifeTime)
         {
@@ -41,11 +45,26 @@ namespace SurveyApi.Persistence.Services
 
             if (result.Succeeded)
             {
-                var token = _tokenHandler.AccessToken(tokenLifeTime);
+                var token = _tokenHandler.CreateAccessToken(tokenLifeTime);
+                await _userService.UpdateRefreshToken(token.RefreshToken, user, token.Expiration, 20);
                 return token;
             }
 
             throw new AuthenticationErrorException();
+        }
+
+        public async Task<Token> LoginRefreshTokenAsync(string refreshToken)
+        {
+            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);
+
+            if(user != null && user.RefreshTokenEndDate > DateTime.UtcNow)
+            {
+                var token = _tokenHandler.CreateAccessToken(20);
+                await _userService.UpdateRefreshToken(token.RefreshToken, user, token.Expiration, 20);
+                return token;
+            }
+            else
+                throw new UserNotFoundException();
         }
     }
 }

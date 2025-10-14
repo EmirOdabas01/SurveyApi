@@ -28,7 +28,7 @@ namespace SurveyApi.Application.Features.Commands.Survey.UpdateSurvey
                 .Include(s => s.SurveyStatus)
                 .FirstOrDefaultAsync();
 
-            if (survey.SurveyStatus.SurveyStatuse != Status.Planned.ToString())
+            if (survey?.SurveyStatus.SurveyStatuse != Status.Planned.ToString())
                 throw new Exception();
 
             survey.Name = request.Name;

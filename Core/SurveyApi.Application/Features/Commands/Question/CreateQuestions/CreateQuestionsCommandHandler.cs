@@ -30,19 +30,8 @@ namespace SurveyApi.Application.Features.Commands.Question.CreateQuestions
 
             List<Domain.Entities.Question> questions = new();
 
-           for(int i = 0; i < request.Questions.Count; i++)
-           {
-
-                //List<QuestionOption> questionOptions = new();         
-
-                //for(int j = 0; j < request.Questions[i].QuestionOptions.Count; j++)
-                //{
-                //    questionOptions.Add(new QuestionOption
-                //    {
-                //        Order = request.Questions[i].QuestionOptions[j].Order,
-                //        Value = request.Questions[i].QuestionOptions[j].Value
-                //    });
-                //}
+            for(int i = 0; i < request.Questions.Count; i++)
+            {
 
                 var options = request.Questions[i].QuestionOptions?.Select(q => new QuestionOption
                 {
@@ -59,11 +48,12 @@ namespace SurveyApi.Application.Features.Commands.Question.CreateQuestions
                     IsMandatory = request.Questions[i].IsMandatory,
                     QuestionOptions =  options,
                 });
-           }
-                 await _questionWriteRepository.AddRangeAsync(questions);
-                var result = await _questionWriteRepository.SaveAsync();
+            }
 
-                return new();
+            await _questionWriteRepository.AddRangeAsync(questions);
+            var result = await _questionWriteRepository.SaveAsync();
+
+            return new();
         }
     }
 }

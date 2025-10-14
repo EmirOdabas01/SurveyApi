@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SurveyApi.Application.Features.Commands.User.LoginUser;
+using SurveyApi.Application.Features.Commands.User.RefreshTokenLogin;
 
 namespace SurveyApi.Api.Controllers
 {
@@ -20,6 +21,13 @@ namespace SurveyApi.Api.Controllers
         public async Task<IActionResult> Login(LoginUserCommandRequest loginUserCommandRequest)
         {
             var response = await _mediator.Send(loginUserCommandRequest);
+            return Ok(response);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RefreshTokenLogin(RefreshTokenLoginCommandRequest refreshTokenLoginCommandRequest )
+        {
+            var response = await _mediator.Send(refreshTokenLoginCommandRequest);
             return Ok(response);
         }
     }

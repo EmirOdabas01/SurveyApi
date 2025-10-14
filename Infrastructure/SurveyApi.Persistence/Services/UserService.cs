@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Identity;
 using SurveyApi.Application.Abstractions.Services;
 using SurveyApi.Application.DTOs.User;
+using SurveyApi.Application.Exceptions;
 using SurveyApi.Application.Features.Commands.User.CreateUser;
+using SurveyApi.Domain.Entities.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,6 +40,19 @@ namespace SurveyApi.Persistence.Services
                     response.Message += $"{error.Code} : {error.Description}\n";
 
             return response;
+        }
+
+        public async Task UpdateRefreshToken(string refreshToken, User user, DateTime accessTokenDate, int minutes)
+        {
+            if (user != null)
+            {
+                user.RefreshToken = refreshToken;
+                user.RefreshTokenEndDate = accessTokenDate.AddMinutes(minutes);
+
+                await _userManager.UpdateAsync(user);
+            }
+            else
+                throw new UserNotFoundException();
         }
     }
 }

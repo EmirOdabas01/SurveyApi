@@ -5,11 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SurveyApi.Application.Abstractions
+namespace SurveyApi.Application.Features.Commands.User.RefreshTokenLogin
 {
-    public interface ITokenHandler
+    public class RefreshTokenLoginCommandResponse
     {
-        Token CreateAccessToken(int minutes);
-        string CreateRefreshToken();
+        public Token Token { get; set; }
     }
 }

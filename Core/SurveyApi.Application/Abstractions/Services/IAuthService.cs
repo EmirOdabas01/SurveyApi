@@ -10,5 +10,6 @@ namespace SurveyApi.Application.Abstractions.Services
     public interface IAuthService
     {
         Task<Token> LoginAsync(string nameOrEmail, string password, int tokenLifeTime);
+        Task<Token> LoginRefreshTokenAsync(string refreshToken);
     }
 }
