@@ -2,10 +2,12 @@
 using Microsoft.IdentityModel.Tokens;
 using SurveyApi.Application.Abstractions;
 using SurveyApi.Application.DTOs;
+using SurveyApi.Domain.Entities.Identity;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,7 +23,7 @@ namespace SurveyApi.Infrastructure.Services
             _configuration = configuration;
         }
 
-        public Token CreateAccessToken(int minutes)
+        public Token CreateAccessToken(int minutes, User user)
         {
             Token token = new();
 
@@ -35,7 +37,8 @@ namespace SurveyApi.Infrastructure.Services
                 issuer: _configuration["Token:Issuer"],
                 expires: token.Expiration,
                 notBefore: DateTime.UtcNow,
-                signingCredentials: signingCredentials
+                signingCredentials: signingCredentials,
+                claims: new List<Claim> { new (ClaimTypes.Name, user.UserName) }
                 );
 
             JwtSecurityTokenHandler tokenHandler = new();

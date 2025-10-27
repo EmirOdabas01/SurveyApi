@@ -36,6 +36,7 @@ namespace SurveyApi.Api.Controllers
             _mediator = mediator;
         }
 
+        [Authorize(AuthenticationSchemes = "Admin")]
         [HttpGet]
         public async Task<IActionResult> GetAllSurveyPublic([FromRoute] GetAllSurveyQueryRequest getAllSurveyQueryRequest)
         {
