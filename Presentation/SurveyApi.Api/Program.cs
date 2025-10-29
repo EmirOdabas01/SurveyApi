@@ -2,6 +2,7 @@ using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.IdentityModel.Tokens;
+using SurveyApi.Api.Extensions;
 using SurveyApi.Application;
 using SurveyApi.Application.Validations.User;
 using SurveyApi.Infrastructure;
@@ -43,6 +44,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 var app = builder.Build();
+
+app.ConfigureExceptionHandler();
 
 if (app.Environment.IsDevelopment())
 {
