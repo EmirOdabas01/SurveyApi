@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using SurveyApi.Application.Repositories;
+using SurveyApi.Application.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,26 +11,17 @@ namespace SurveyApi.Application.Features.Queries.Survey.GetSurveyById
 {
     public class GetSurveyByIdQueryHandler : IRequestHandler<GetSurveyByIdQueryRequest, GetSurveyByIdQueryResponse>
     {
-        private readonly ISurveyReadRepository _surveyReadRepository;
+        private readonly ISurveyService _surveyService;
 
-        public GetSurveyByIdQueryHandler(ISurveyReadRepository surveyReadRepository)
+        public GetSurveyByIdQueryHandler(ISurveyService surveyService)
         {
-            _surveyReadRepository = surveyReadRepository;
+            _surveyService = surveyService;
         }
 
         public async Task<GetSurveyByIdQueryResponse> Handle(GetSurveyByIdQueryRequest request, CancellationToken cancellationToken)
         {
-            var survey = await _surveyReadRepository.GetByIdAsync(request.Id, false);
-
-            if(survey == null)
-                throw new Exception();
-
-            return new()
-            {
-                Id = survey.SurveyId.ToString(),
-                Name = survey.Name,
-                Description = survey.Description,
-            };
+            var response = await _surveyService.GetSurveyByIdAsync(request);
+            return response;
         }
     }
 }

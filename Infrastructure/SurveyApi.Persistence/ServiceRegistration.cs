@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Protocols;
 using Npgsql.EntityFrameworkCore;
 using SurveyApi.Application.Abstractions.Services;
 using SurveyApi.Application.Repositories;
+using SurveyApi.Application.Services;
 using SurveyApi.Domain.Entities.Identity;
 using SurveyApi.Persistence.Contexts;
 using SurveyApi.Persistence.Repositories;
@@ -50,6 +51,7 @@ namespace SurveyApi.Persistence
 
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<ISurveyService, SurveyService>();
         }
     }
 }

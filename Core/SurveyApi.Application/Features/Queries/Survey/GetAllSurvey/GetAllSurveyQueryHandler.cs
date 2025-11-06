@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using SurveyApi.Application.Enums;
 using SurveyApi.Application.Repositories;
+using SurveyApi.Application.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,31 +13,17 @@ namespace SurveyApi.Application.Features.Queries.Survey.GetAllSurvey
 {
     public class GetAllSurveyQueryHandler : IRequestHandler<GetAllSurveyQueryRequest, GetAllSurveyQueryResponse>
     {
-        private readonly ISurveyReadRepository _surveyReadRepository;
+        private readonly ISurveyService _surveyService;
 
-        public GetAllSurveyQueryHandler(ISurveyReadRepository surveyReadRepository)
+        public GetAllSurveyQueryHandler(ISurveyService surveyService)
         {
-            _surveyReadRepository = surveyReadRepository;
+            _surveyService = surveyService;
         }
 
         public async Task<GetAllSurveyQueryResponse> Handle(GetAllSurveyQueryRequest request, CancellationToken cancellationToken)
         {
-            var surveys =  _surveyReadRepository.GetAll(false)
-                .Where(s => s.Visibility.State == VisibilityStat.Public.ToString() && s.SurveyStatus.SurveyStatuse == Status.Open.ToString())
-                .Skip(request.Size * request.Page)
-                .Take(request.Size)
-                .Select(s => new {
-                Id = s.SurveyId,
-                Name = s.Name,
-                Description = s.Description,
-                }).ToList();
-
-            int count = surveys.Count();
-            return new()
-            {
-                Count = count,
-                Surveys = surveys
-            };
+            var response = await _surveyService.GetAllSurveyAsync(request);
+            return response;
         }
     }
 }

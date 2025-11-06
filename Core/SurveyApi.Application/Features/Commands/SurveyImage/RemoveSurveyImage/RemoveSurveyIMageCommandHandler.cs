@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using SurveyApi.Application.Repositories;
+using SurveyApi.Application.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -11,22 +12,18 @@ namespace SurveyApi.Application.Features.Commands.SurveyImage.RemoveSurveyImage
 {
     public class RemoveSurveyIMageCommandHandler : IRequestHandler<RemoveSurveyIMageCommandRequest, RemoveSurveyIMageCommandResponse>
     {
-        private readonly IImageFileWriteRepository _ımageFileWriteRepository;
-        private readonly IImageFileReadRepository _ımageFileReadRepository;
-        public RemoveSurveyIMageCommandHandler(IImageFileWriteRepository ımageFileWriteRepository, IImageFileReadRepository ımageFileReadRepository)
+
+        private readonly ISurveyService _surveyService;
+
+        public RemoveSurveyIMageCommandHandler(ISurveyService surveyService)
         {
-            _ımageFileWriteRepository = ımageFileWriteRepository;
-            _ımageFileReadRepository = ımageFileReadRepository;
+            _surveyService = surveyService;
         }
 
         public async Task<RemoveSurveyIMageCommandResponse> Handle(RemoveSurveyIMageCommandRequest request, CancellationToken cancellationToken)
         {
-            var imageFile = await _ımageFileReadRepository.GetByIdAsync(request.Id);
-            
-            if(imageFile != null)
-               await _ımageFileWriteRepository.RemoveAsync(request.Id);
-
-            return new();
+            var response = await _surveyService.RemoveSurveyImageAsync(request);
+            return response;
         }
     }
 }

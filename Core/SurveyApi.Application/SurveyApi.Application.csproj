@@ -19,9 +19,4 @@
     <ProjectReference Include="..\SurveyApi.Domain\SurveyApi.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\Queries\Survey\GetAllSurveyForGroups\" />
-    <Folder Include="Features\Queries\Survey\GetAllSurveyCreatedByUser\" />
-  </ItemGroup>
-
 </Project>

@@ -30,7 +30,6 @@ namespace SurveyApi.Persistence.Contexts
         public DbSet<Visibility> Visibilities { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Survey>()
                 .HasKey(s => s.SurveyId);
@@ -98,6 +97,10 @@ namespace SurveyApi.Persistence.Contexts
                 .IsRequired(true)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<Group>()
+                .HasMany(g => g.Users)
+                .WithMany(u => u.Groups);
+
             //modelBuilder.Entity<ImageFile>()
             //    .HasKey(ı => ı.Id);
 
@@ -134,6 +137,8 @@ namespace SurveyApi.Persistence.Contexts
                 new {Id = Convert.ToInt32(VisibilityStat.Group), State = VisibilityStat.Group.ToString()},
                 new {Id = Convert.ToInt32(VisibilityStat.Private), State = VisibilityStat.Private.ToString()}
                 );
+
+            base.OnModelCreating(modelBuilder);
         }
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {

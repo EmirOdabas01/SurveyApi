@@ -2,6 +2,7 @@
 using SurveyApi.Application.Enums;
 using SurveyApi.Application.Features.Queries.Survey.GetAllSurveyPrivateQuery;
 using SurveyApi.Application.Repositories;
+using SurveyApi.Application.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,31 +13,17 @@ namespace SurveyApi.Application.Features.Queries.Survey.GetAllSurveyPrivate
 {
     public class GetAllSurveyPrivateQueryHandler : IRequestHandler<GetAllSurveyPrivateQueryRequest, GetAllSurveyPrivateQueryResponse>
     {
-        private readonly ISurveyReadRepository _surveyReadRepository;
+        private readonly ISurveyService _surveyService;
 
-        public GetAllSurveyPrivateQueryHandler(ISurveyReadRepository surveyReadRepository)
+        public GetAllSurveyPrivateQueryHandler(ISurveyService surveyService)
         {
-            _surveyReadRepository = surveyReadRepository;
+            _surveyService = surveyService;
         }
 
         public async Task<GetAllSurveyPrivateQueryResponse> Handle(GetAllSurveyPrivateQueryRequest request, CancellationToken cancellationToken)
         {
-            var surveys = _surveyReadRepository.GetAll(false)
-               .Where(s => s.Visibility.State == VisibilityStat.Private.ToString() && s.SurveyStatus.SurveyStatuse == Status.Open.ToString())
-               .Skip(request.Size * request.Page)
-               .Take(request.Size)
-               .Select(s => new {
-                   Id = s.SurveyId,
-                   Name = s.Name,
-                   Description = s.Description,
-               }).ToList(); 
-
-            int count = surveys.Count();
-            return new()
-            {
-                Count = count,
-                Surveys = surveys
-            };
+            var response = await _surveyService.GetAllSurveyPrivateAsync(request);
+            return response;
         }
     }
 }

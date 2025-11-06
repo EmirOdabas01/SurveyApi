@@ -13,5 +13,6 @@ namespace SurveyApi.Domain.Entities.Identity
         public string? RefreshToken { get; set; }
         public DateTime? RefreshTokenEndDate { get; set; }
         public ICollection<Survey> Surveys { get; set; }
+        public ICollection<Group> Groups { get; set; }
     }
 }

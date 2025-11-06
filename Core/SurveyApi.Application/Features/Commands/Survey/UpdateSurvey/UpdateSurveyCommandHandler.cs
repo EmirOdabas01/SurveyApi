@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using SurveyApi.Application.Enums;
 using SurveyApi.Application.Repositories;
+using SurveyApi.Application.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,35 +13,18 @@ namespace SurveyApi.Application.Features.Commands.Survey.UpdateSurvey
 {
     public class UpdateSurveyCommandHandler : IRequestHandler<UpdateSurveyCommandRequest, UpdateSurveyCommandResponse>
     {
-        private readonly ISurveyWriteRepository _surveyWriteRepository;
-        private readonly ISurveyReadRepository _surveyReadRepository;
 
-        public UpdateSurveyCommandHandler(ISurveyWriteRepository surveyWriteRepository,
-            ISurveyReadRepository surveyReadRepository)
+        private readonly ISurveyService _surveyService;
+
+        public UpdateSurveyCommandHandler(ISurveyService surveyService)
         {
-            _surveyWriteRepository = surveyWriteRepository;
-            _surveyReadRepository = surveyReadRepository;
+            _surveyService = surveyService;
         }
 
         public async Task<UpdateSurveyCommandResponse> Handle(UpdateSurveyCommandRequest request, CancellationToken cancellationToken)
         {
-            var survey = await _surveyReadRepository.GetWhere(s => s.SurveyId == Guid.Parse(request.Id))
-                .Include(s => s.SurveyStatus)
-                .FirstOrDefaultAsync();
-
-            if (survey?.SurveyStatus.SurveyStatuse != Status.Planned.ToString())
-                throw new Exception();
-
-            survey.Name = request.Name;
-            survey.Description = request.Description;
-            survey.MinResponse = request.MinResponse;
-            survey.MaxResponse = request.MaxResponse;
-            survey.StartDate = request.StartDate;
-            survey.EndDate = request.EndDate;
-            survey.VisibilityId = Convert.ToInt32(request.Visibility);
-
-            await _surveyWriteRepository.SaveAsync();
-            return new();
+            var response = await _surveyService.UpdateSurveyAsync(request);
+            return response;
         }
     }
 }

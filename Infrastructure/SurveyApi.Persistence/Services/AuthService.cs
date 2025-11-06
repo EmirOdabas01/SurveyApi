@@ -60,7 +60,7 @@ namespace SurveyApi.Persistence.Services
             if(user != null && user.RefreshTokenEndDate > DateTime.UtcNow)
             {
                 var token = _tokenHandler.CreateAccessToken(20, user);
-                await _userService.UpdateRefreshToken(token.RefreshToken, user, token.Expiration, 20);
+                await _userService.UpdateRefreshToken(token.RefreshToken, user, token.Expiration, 40);
                 return token;
             }
             else
