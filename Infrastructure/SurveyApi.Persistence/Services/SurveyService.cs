@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using SurveyApi.Application.Abstractions.Services;
+using SurveyApi.Application.DTOs.Survey;
+using SurveyApi.Application.DTOs.SurveyImage;
 using SurveyApi.Application.Enums;
 using SurveyApi.Application.Exceptions;
 using SurveyApi.Application.Features.Commands.Survey.CloseSurvey;
@@ -21,7 +24,6 @@ using SurveyApi.Application.Features.Queries.Survey.GetSurveyById;
 using SurveyApi.Application.Features.Queries.Survey.GetSurveyByIdDetail;
 using SurveyApi.Application.Features.Queries.SurveyImage.GetSurveyImage;
 using SurveyApi.Application.Repositories;
-using SurveyApi.Application.Services;
 using SurveyApi.Domain.Entities;
 using SurveyApi.Domain.Entities.Identity;
 using SurveyApi.Persistence.Repositories;
@@ -88,7 +90,7 @@ namespace SurveyApi.Persistence.Services
 
             return user;
         }
-        public async Task<CreateSurveyCommandResponse> CreateSurveyAsync(CreateSurveyCommandRequest model)
+        public async Task CreateSurveyAsync(CreateSurveyDto model)
         {
             var user = await ContextUser();
 
@@ -105,10 +107,9 @@ namespace SurveyApi.Persistence.Services
             });
 
             await _surveyWriteRepository.SaveAsync();
-            return new();
         }
 
-        public async Task<GetAllSurveyQueryResponse> GetAllSurveyAsync(GetAllSurveyQueryRequest model)
+        public async Task<GetAllSurveyResponseDto> GetAllSurveyAsync(GetAllSurveyRequestDto model)
         {
             var surveys = _surveyReadRepository.GetAll(false)
                .Where(s => s.Visibility.State == VisibilityStat.Public.ToString() && s.SurveyStatus.SurveyStatuse == Status.Open.ToString())
@@ -128,7 +129,7 @@ namespace SurveyApi.Persistence.Services
             };
         }
 
-        public async Task<GetAllSurveyForGroupsQueryResponse> GetAllSurveyForGroupAsync(GetAllSurveyForGroupsQueryRequest model)
+        public async Task<GetAllSurveyResponseDto> GetAllSurveyForGroupAsync()
         {
             var user = await ContextUser();
 
@@ -160,10 +161,10 @@ namespace SurveyApi.Persistence.Services
                 .Where(g => g.Surveys.Any())  
                 .ToList();
 
-            return new GetAllSurveyForGroupsQueryResponse
+            return new GetAllSurveyResponseDto
             {
                 Count = groupSurveyPairs.Sum(g => g.Surveys.Count),
-                GroupSurveys = groupSurveyPairs.Select(g => new
+                Surveys = groupSurveyPairs.Select(g => new
                 {
                     g.GroupName,
                     Surveys = g.Surveys
@@ -171,7 +172,7 @@ namespace SurveyApi.Persistence.Services
             };
         }
 
-        public async Task<GetAllSurveyPrivateQueryResponse> GetAllSurveyPrivateAsync(GetAllSurveyPrivateQueryRequest model)
+        public async Task<GetAllSurveyResponseDto> GetAllSurveyPrivateAsync(GetAllSurveyRequestDto model)
         {
             var surveys = _surveyReadRepository.GetAll(false)
               .Where(s => s.Visibility.State == VisibilityStat.Private.ToString() && s.SurveyStatus.SurveyStatuse == Status.Open.ToString())
@@ -191,9 +192,9 @@ namespace SurveyApi.Persistence.Services
             };
         }
 
-        public async Task<GetSurveyByIdQueryResponse> GetSurveyByIdAsync(GetSurveyByIdQueryRequest model)
+        public async Task<GetSurveyByIdResponseDto> GetSurveyByIdAsync(string Id)
         {
-            var survey = await _surveyReadRepository.GetByIdAsync(model.Id, false);
+            var survey = await _surveyReadRepository.GetByIdAsync(Id, false);
 
             if (survey == null)
                 throw new Exception();
@@ -206,9 +207,9 @@ namespace SurveyApi.Persistence.Services
             };
         }
 
-        public async Task<GetSurveyByIdDetailQueryResponse> GetSurveyByIdDetailAsync(GetSurveyByIdDetailQueryRequest model)
+        public async Task<GetSurveyByIdDetailResponseDto> GetSurveyByIdDetailAsync(string Id)
         {
-            var survey = await _surveyReadRepository.GetByIdAsync(model.Id, false);
+            var survey = await _surveyReadRepository.GetByIdAsync(Id, false);
 
             return new()
             {
@@ -222,9 +223,9 @@ namespace SurveyApi.Persistence.Services
             };
         }
 
-        public async Task<GetSurveyImageQueryResponse> GetSurveyImageAsync(GetSurveyImageQueryRequest model)
+        public async Task<GetSurveyImageResponseDto> GetSurveyImageAsync(string SurveyId)
         {
-            var survey = await _surveyReadRepository.Table.Include(s => s.ImageFile).FirstOrDefaultAsync(p => p.SurveyId == Guid.Parse(model.Id));
+            var survey = await _surveyReadRepository.Table.Include(s => s.ImageFile).FirstOrDefaultAsync(p => p.SurveyId == Guid.Parse(SurveyId));
 
             if (survey == null)
                 throw new Exception();
@@ -236,7 +237,7 @@ namespace SurveyApi.Persistence.Services
             };
         }
 
-        public async Task<GetAllSurveyCreatedByUserQueryResponse> GetUserSurveysAsync(GetAllSurveyCreatedByUserQueryRequest model)
+        public async Task<GetAllSurveyResponseDto> GetUserSurveysAsync()
         {
             var user = await ContextUser();
 
@@ -254,13 +255,17 @@ namespace SurveyApi.Persistence.Services
               Path = s.ImageFile?.Path
             }).ToList();
 
-            GetAllSurveyCreatedByUserQueryResponse response = new() { Surveys = surveys};
+            GetAllSurveyResponseDto response = new()
+            {
+                Count = surveys.Count,
+                Surveys = surveys
+            };
             return response;
         }
 
-        public async Task<RemoveSurveyCommandResponse> RemoveSurveyAsync(RemoveSurveyCommandRequest model)
+        public async Task RemoveSurveyAsync(string Id)
         {
-            var survey = await _surveyReadRepository.GetWhere(s => s.SurveyId == Guid.Parse(model.Id))
+            var survey = await _surveyReadRepository.GetWhere(s => s.SurveyId == Guid.Parse(Id))
                .Include(s => s.SurveyStatus)
                .Include(s => s.Questions)
                .ThenInclude(q => q.Answers)
@@ -283,23 +288,19 @@ namespace SurveyApi.Persistence.Services
                 await _answerWriteRepository.SaveAsync();
             }
 
-            await _surveyWriteRepository.RemoveAsync(model.Id);
+            await _surveyWriteRepository.RemoveAsync(Id);
             await _surveyWriteRepository.SaveAsync();
-
-            return new();
         }
 
-        public async Task<RemoveSurveyIMageCommandResponse> RemoveSurveyImageAsync(RemoveSurveyIMageCommandRequest model)
+        public async Task RemoveSurveyImageAsync(int Id)
         {
-            var imageFile = await _ımageFileReadRepository.GetByIdAsync(model.Id);
+            var imageFile = await _ımageFileReadRepository.GetByIdAsync(Id);
 
             if (imageFile != null)
-                await _ımageFileWriteRepository.RemoveAsync(model.Id);
-
-            return new();
+                await _ımageFileWriteRepository.RemoveAsync(Id);
         }
 
-        public async Task<UpdateSurveyCommandResponse> UpdateSurveyAsync(UpdateSurveyCommandRequest model)
+        public async Task UpdateSurveyAsync(UpdateSurveyDto model)
         {
             var survey = await _surveyReadRepository.GetWhere(s => s.SurveyId == Guid.Parse(model.Id))
                 .Include(s => s.SurveyStatus)
@@ -317,10 +318,9 @@ namespace SurveyApi.Persistence.Services
             survey.VisibilityId = Convert.ToInt32(model.Visibility);
 
             await _surveyWriteRepository.SaveAsync();
-            return new();
         }
 
-        public async Task<UploadSurveyImageCommandResponse> UploadSurveyImageAsync(UploadSurveyImageCommandRequest model)
+        public async Task UploadSurveyImageAsync(UploadSurveyImageDto model)
         {
             var survey = await _surveyReadRepository.GetByIdAsync(model.Id, false);
 
@@ -337,12 +337,11 @@ namespace SurveyApi.Persistence.Services
             });
 
             await _ımageFileWriteRepository.SaveAsync();
-            return new();
         }
 
-        public async Task<PublishSurveyCommandResponse> PublishSurveyAsync(PublishSurveyCommandRequest model)
+        public async Task<bool> PublishSurveyAsync(string Id)
         {
-            var survey = await _surveyReadRepository.GetByIdAsync(model.SurveyId);
+            var survey = await _surveyReadRepository.GetByIdAsync(Id);
 
             if (survey == null)
                 throw new SurveyNotFoundException();
@@ -350,15 +349,15 @@ namespace SurveyApi.Persistence.Services
             survey.SurveyStatusId = (int)Status.Open;
             int success = await _surveyWriteRepository.SaveAsync();
 
-            return new PublishSurveyCommandResponse()
-            {
-                Success = Convert.ToBoolean(success)
-            };
+            if (success > 0)
+                return true;
+
+            return false;
         }
 
-        public async Task<CloseSurveyCommandResponse> CloseSurveyAsync(CloseSurveyCommandRequest model)
+        public async Task<bool> CloseSurveyAsync(string Id)
         {
-            var survey = await _surveyReadRepository.GetByIdAsync(model.SurveyId);
+            var survey = await _surveyReadRepository.GetByIdAsync(Id);
 
             if (survey == null)
                 throw new SurveyNotFoundException();
@@ -366,10 +365,10 @@ namespace SurveyApi.Persistence.Services
             survey.SurveyStatusId = (int)Status.Closed;
             int success = await _surveyWriteRepository.SaveAsync();
 
-            return new CloseSurveyCommandResponse()
-            {
-                Success = Convert.ToBoolean(success)
-            };
+            if (success > 0)
+                return true;
+
+            return false;
         }
     }
 }

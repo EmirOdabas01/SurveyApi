@@ -1,8 +1,8 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using SurveyApi.Application.Abstractions.Services;
 using SurveyApi.Application.Enums;
 using SurveyApi.Application.Repositories;
-using SurveyApi.Application.Services;
 using SurveyApi.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -24,8 +24,8 @@ namespace SurveyApi.Application.Features.Commands.Survey.RemoveSurvey
 
         public async Task<RemoveSurveyCommandResponse> Handle(RemoveSurveyCommandRequest request, CancellationToken cancellationToken)
         {
-            var response = await _surveyService.RemoveSurveyAsync(request);
-            return response;
+            await _surveyService.RemoveSurveyAsync(request.Id);
+            return new();
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using MediatR;
+using SurveyApi.Application.Abstractions.Services;
 using SurveyApi.Application.Repositories;
-using SurveyApi.Application.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,8 +20,13 @@ namespace SurveyApi.Application.Features.Queries.Survey.GetSurveyById
 
         public async Task<GetSurveyByIdQueryResponse> Handle(GetSurveyByIdQueryRequest request, CancellationToken cancellationToken)
         {
-            var response = await _surveyService.GetSurveyByIdAsync(request);
-            return response;
+            var response = await _surveyService.GetSurveyByIdAsync(request.Id);
+            return new GetSurveyByIdQueryResponse
+            {
+                Id = response.Id,
+                Name = response.Name,
+                Description = response.Description
+            };
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using SurveyApi.Application.Services;
+using SurveyApi.Application.Abstractions.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -6,7 +6,6 @@ using Microsoft.IdentityModel.Protocols;
 using Npgsql.EntityFrameworkCore;
 using SurveyApi.Application.Abstractions.Services;
 using SurveyApi.Application.Repositories;
-using SurveyApi.Application.Services;
 using SurveyApi.Domain.Entities.Identity;
 using SurveyApi.Persistence.Contexts;
 using SurveyApi.Persistence.Repositories;

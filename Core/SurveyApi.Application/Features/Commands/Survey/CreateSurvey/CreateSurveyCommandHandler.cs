@@ -1,6 +1,6 @@
 ﻿using MediatR;
+using SurveyApi.Application.Abstractions.Services;
 using SurveyApi.Application.Repositories;
-using SurveyApi.Application.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,8 +20,17 @@ namespace SurveyApi.Application.Features.Commands.Survey.CreateSurvey
 
         public async Task<CreateSurveyCommandResponse> Handle(CreateSurveyCommandRequest request, CancellationToken cancellationToken)
         {
-            var response = await _surveyService.CreateSurveyAsync(request);
-            return response;
+           await _surveyService.CreateSurveyAsync(new DTOs.Survey.CreateSurveyDto
+            {
+                Name = request.Name,
+                Description = request.Description,
+                Visibility = request.Visibility,
+                StartDate = request.StartDate,
+                EndDate = request.EndDate,
+                MinResponse = request.MinResponse,
+                MaxResponse = request.MaxResponse
+            });
+            return new();
         }
     }
 }

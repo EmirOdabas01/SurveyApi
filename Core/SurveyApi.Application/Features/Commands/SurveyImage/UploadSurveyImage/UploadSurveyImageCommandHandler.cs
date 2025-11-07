@@ -1,6 +1,6 @@
 ﻿using MediatR;
+using SurveyApi.Application.Abstractions.Services;
 using SurveyApi.Application.Repositories;
-using SurveyApi.Application.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,8 +21,12 @@ namespace SurveyApi.Application.Features.Commands.SurveyImage.UploadSurveyImage
 
         public async Task<UploadSurveyImageCommandResponse> Handle(UploadSurveyImageCommandRequest request, CancellationToken cancellationToken)
         {
-            var response = await _surveyService.UploadSurveyImageAsync(request);
-            return response;
+            await _surveyService.UploadSurveyImageAsync(new DTOs.SurveyImage.UploadSurveyImageDto
+            {
+                Id = request.Id,
+                Files = request.Files
+            });
+            return new();
         }
     }
 }

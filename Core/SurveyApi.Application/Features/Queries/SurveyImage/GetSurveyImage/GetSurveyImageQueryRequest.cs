@@ -9,6 +9,6 @@ namespace SurveyApi.Application.Features.Queries.SurveyImage.GetSurveyImage
 {
     public class GetSurveyImageQueryRequest : IRequest<GetSurveyImageQueryResponse>
     {
-        public string Id { get;set; }
+        public string SurveyId { get;set; }
     }
 }

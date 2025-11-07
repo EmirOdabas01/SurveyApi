@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using SurveyApi.Application.Services;
+using SurveyApi.Application.Abstractions.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,8 +19,8 @@ namespace SurveyApi.Application.Features.Commands.Survey.CloseSurvey
 
         public async Task<CloseSurveyCommandResponse> Handle(CloseSurveyCommandRequest request, CancellationToken cancellationToken)
         {
-            var response = await _surveyService.CloseSurveyAsync(request);
-            return response;
+            var response = await _surveyService.CloseSurveyAsync(request.SurveyId);
+            return new();
         }
     }
 }

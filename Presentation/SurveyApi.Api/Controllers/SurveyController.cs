@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SurveyApi.Application.Abstractions.Services;
 using SurveyApi.Application.Features.Commands.Survey.CloseSurvey;
 using SurveyApi.Application.Features.Commands.Survey.CreateSurvey;
 using SurveyApi.Application.Features.Commands.Survey.PublishSurvey;
@@ -18,7 +19,6 @@ using SurveyApi.Application.Features.Queries.Survey.GetSurveyByIdDetail;
 using SurveyApi.Application.Features.Queries.SurveyImage.GetSurveyImage;
 using SurveyApi.Application.Repositories;
 using SurveyApi.Application.RequestParameters;
-using SurveyApi.Application.Services;
 using SurveyApi.Application.ViewModels.Survey;
 
 namespace SurveyApi.Api.Controllers

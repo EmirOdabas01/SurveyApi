@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.IdentityModel.Tokens;
 using SurveyApi.Api.Extensions;
 using SurveyApi.Application;
-using SurveyApi.Application.Validations.User;
+using SurveyApi.Application.Validations.Survey;
 using SurveyApi.Infrastructure;
 using SurveyApi.Infrastructure.Filters;
 using SurveyApi.Persistence;
@@ -21,7 +21,7 @@ builder.Services.AddCors(corsOption => corsOption.AddDefaultPolicy(options
     => options.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 
 builder.Services.AddControllers(options => options.Filters.Add<ValidationFilter>())
-    .AddFluentValidation(configuration => configuration.RegisterValidatorsFromAssemblyContaining<UserValidator>())
+    .AddFluentValidation(configuration => configuration.RegisterValidatorsFromAssemblyContaining<SurveyValidator>())
     .ConfigureApiBehaviorOptions(options => options.SuppressModelStateInvalidFilter = true);
 builder.Services.AddOpenApi();
 

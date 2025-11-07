@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SurveyApi.Application.Services
+namespace SurveyApi.Application.Abstractions.Services
 {
     public interface IFileService
     {

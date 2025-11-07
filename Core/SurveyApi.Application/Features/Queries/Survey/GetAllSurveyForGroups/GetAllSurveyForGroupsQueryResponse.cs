@@ -9,6 +9,6 @@ namespace SurveyApi.Application.Features.Queries.Survey.GetAllSurveyForGroups
     public class GetAllSurveyForGroupsQueryResponse
     {
         public int Count { get; set; }
-        public object GroupSurveys { get; set; }
+        public Object GroupSurveys { get; set; }
     }
 }

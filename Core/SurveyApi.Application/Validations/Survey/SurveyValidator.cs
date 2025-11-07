@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using SurveyApi.Application.Features.Commands.Survey.CreateSurvey;
 using SurveyApi.Application.ViewModels.Survey;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace SurveyApi.Application.Validations.Survey
 {
-    public class SurveyValidator : AbstractValidator<VM_Create_Survey>
+    public class SurveyValidator : AbstractValidator<CreateSurveyCommandRequest>
     {
         public SurveyValidator()
         {

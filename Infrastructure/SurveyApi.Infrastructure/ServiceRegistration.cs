@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SurveyApi.Application.Abstractions;
-using SurveyApi.Application.Services;
+using SurveyApi.Application.Abstractions.Services;
 using SurveyApi.Infrastructure.Services;
 using System;
 using System.Collections.Generic;

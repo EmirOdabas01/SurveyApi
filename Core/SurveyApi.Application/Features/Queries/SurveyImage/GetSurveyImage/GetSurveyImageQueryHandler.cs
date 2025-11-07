@@ -1,8 +1,8 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using SurveyApi.Application.Abstractions.Services;
 using SurveyApi.Application.Repositories;
-using SurveyApi.Application.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,8 +23,8 @@ namespace SurveyApi.Application.Features.Queries.SurveyImage.GetSurveyImage
 
         public async Task<GetSurveyImageQueryResponse> Handle(GetSurveyImageQueryRequest request, CancellationToken cancellationToken)
         {
-            var response = await _surveyService.GetSurveyImageAsync(request);
-            return response;
+            var response = await _surveyService.GetSurveyImageAsync(request.SurveyId);
+            return new();
         }
     }
 }

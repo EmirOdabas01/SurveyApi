@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using SurveyApi.Application.Services;
+using SurveyApi.Application.Abstractions.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,8 +19,11 @@ namespace SurveyApi.Application.Features.Commands.Survey.PublishSurvey
 
         public async Task<PublishSurveyCommandResponse> Handle(PublishSurveyCommandRequest request, CancellationToken cancellationToken)
         {
-            var response = await _surveyService.PublishSurveyAsync(request);
-            return response;
+            var response = await _surveyService.PublishSurveyAsync(request.SurveyId);
+            return new PublishSurveyCommandResponse
+            {
+                Success = response
+            };
         }
     }
 }

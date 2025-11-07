@@ -1,8 +1,8 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using SurveyApi.Application.Abstractions.Services;
 using SurveyApi.Application.Enums;
 using SurveyApi.Application.Repositories;
-using SurveyApi.Application.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,8 +23,18 @@ namespace SurveyApi.Application.Features.Commands.Survey.UpdateSurvey
 
         public async Task<UpdateSurveyCommandResponse> Handle(UpdateSurveyCommandRequest request, CancellationToken cancellationToken)
         {
-            var response = await _surveyService.UpdateSurveyAsync(request);
-            return response;
+             await _surveyService.UpdateSurveyAsync(new DTOs.Survey.UpdateSurveyDto
+             {
+                 Id = request.Id,
+                 Name = request.Name,
+                 Visibility = request.Visibility,
+                 Description = request.Description,
+                 StartDate = request.StartDate,
+                 EndDate = request.EndDate,
+                 MinResponse = request.MinResponse,
+                 MaxResponse = request.MaxResponse
+             });
+            return new();
         }
     }
 }

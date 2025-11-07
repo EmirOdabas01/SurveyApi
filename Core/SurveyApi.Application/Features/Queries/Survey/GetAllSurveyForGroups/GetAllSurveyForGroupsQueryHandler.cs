@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using SurveyApi.Application.Services;
+using SurveyApi.Application.Abstractions.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,8 +20,12 @@ namespace SurveyApi.Application.Features.Queries.Survey.GetAllSurveyForGroups
 
         public async Task<GetAllSurveyForGroupsQueryResponse> Handle(GetAllSurveyForGroupsQueryRequest request, CancellationToken cancellationToken)
         {
-            var response = await _surveyService.GetAllSurveyForGroupAsync(request);
-            return response;
+            var response = await _surveyService.GetAllSurveyForGroupAsync();
+            return new GetAllSurveyForGroupsQueryResponse
+            {
+                Count = response.Count,
+                GroupSurveys = response.Surveys
+            };
         }
     }
 }

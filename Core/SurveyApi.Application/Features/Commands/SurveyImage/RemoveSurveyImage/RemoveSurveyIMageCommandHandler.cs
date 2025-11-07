@@ -1,6 +1,6 @@
 ﻿using MediatR;
+using SurveyApi.Application.Abstractions.Services;
 using SurveyApi.Application.Repositories;
-using SurveyApi.Application.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -22,8 +22,8 @@ namespace SurveyApi.Application.Features.Commands.SurveyImage.RemoveSurveyImage
 
         public async Task<RemoveSurveyIMageCommandResponse> Handle(RemoveSurveyIMageCommandRequest request, CancellationToken cancellationToken)
         {
-            var response = await _surveyService.RemoveSurveyImageAsync(request);
-            return response;
+            await _surveyService.RemoveSurveyImageAsync(request.Id);
+            return new();
         }
     }
 }

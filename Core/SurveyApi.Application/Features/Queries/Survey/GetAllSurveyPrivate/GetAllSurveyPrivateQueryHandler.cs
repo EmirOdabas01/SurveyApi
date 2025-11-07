@@ -1,8 +1,8 @@
 ﻿using MediatR;
+using SurveyApi.Application.Abstractions.Services;
 using SurveyApi.Application.Enums;
 using SurveyApi.Application.Features.Queries.Survey.GetAllSurveyPrivateQuery;
 using SurveyApi.Application.Repositories;
-using SurveyApi.Application.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,8 +22,16 @@ namespace SurveyApi.Application.Features.Queries.Survey.GetAllSurveyPrivate
 
         public async Task<GetAllSurveyPrivateQueryResponse> Handle(GetAllSurveyPrivateQueryRequest request, CancellationToken cancellationToken)
         {
-            var response = await _surveyService.GetAllSurveyPrivateAsync(request);
-            return response;
+            var response = await _surveyService.GetAllSurveyPrivateAsync(new DTOs.Survey.GetAllSurveyRequestDto
+            {
+                Page = request.Page,
+                Size = request.Size
+            });
+            return new GetAllSurveyPrivateQueryResponse
+            {
+                Count = response.Count,
+                Surveys = response.Surveys
+            };
         }
     }
 }
