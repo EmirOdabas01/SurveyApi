@@ -136,39 +136,31 @@ namespace SurveyApi.Persistence.Services
             var userGroups = await _groupReadRepository
                .Table
                .Include(g => g.Users)
-               .ThenInclude(u => u.Surveys)  
+                   .ThenInclude(u => u.Surveys)
+               .Where(g => g.Users.Any(u => u.Id == user.Id))
                .ToListAsync();
 
-            var groupsOfUser = userGroups
-                .Where(g => g.Users.Any(u => u.Id == user.Id))
-                .ToList();
-
-            var groupSurveyPairs = groupsOfUser
-                .Select(g => new
+            var allSurveys = userGroups
+                .SelectMany(g => g.Users)
+                .Where(u => u.Id != user.Id)
+                .SelectMany(u => u.Surveys)
+                .Where(s => s.Visibility.State == VisibilityStat.Group.ToString() &&
+                           s.SurveyStatus.SurveyStatuse == Status.Open.ToString())
+                .GroupBy(s => s.SurveyId)
+                .Select(g => g.First())
+                .Select(s => new
                 {
-                    GroupName = g.Name,
-                    Surveys = g.Users
-                        .Where(u => u.Id != user.Id)  
-                        .SelectMany(u => u.Surveys)
-                        .Select(s => new
-                        {
-                            s.SurveyId,
-                            s.Name,
-                            s.Description
-                        })
-                        .ToList()
+                    SurveyId = s.SurveyId,
+                    Name = s.Name,
+                    Description = s.Description,
+                    CreatedBy = s.User.UserName  
                 })
-                .Where(g => g.Surveys.Any())  
                 .ToList();
 
             return new GetAllSurveyResponseDto
             {
-                Count = groupSurveyPairs.Sum(g => g.Surveys.Count),
-                Surveys = groupSurveyPairs.Select(g => new
-                {
-                    g.GroupName,
-                    Surveys = g.Surveys
-                })
+                Count = allSurveys.Count,
+                Surveys = allSurveys
             };
         }
 
