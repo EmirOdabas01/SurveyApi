@@ -51,6 +51,7 @@ namespace SurveyApi.Persistence
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<ISurveyService, SurveyService>();
+            services.AddScoped<IGroupService, GroupService>();
         }
     }
 }

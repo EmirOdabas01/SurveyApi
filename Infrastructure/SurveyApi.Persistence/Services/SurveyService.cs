@@ -111,7 +111,7 @@ namespace SurveyApi.Persistence.Services
 
         public async Task<GetAllSurveyResponseDto> GetAllSurveyAsync(GetAllSurveyRequestDto model)
         {
-            var surveys = _surveyReadRepository.GetAll(false)
+            var surveys = await _surveyReadRepository.GetAll(false)
                .Where(s => s.Visibility.State == VisibilityStat.Public.ToString() && s.SurveyStatus.SurveyStatuse == Status.Open.ToString())
                .Skip(model.Size * model.Page)
                .Take(model.Size)
@@ -119,7 +119,7 @@ namespace SurveyApi.Persistence.Services
                    Id = s.SurveyId,
                    Name = s.Name,
                    Description = s.Description,
-               }).ToList();
+               }).ToListAsync();
 
             int count = surveys.Count();
             return new()
@@ -174,7 +174,8 @@ namespace SurveyApi.Persistence.Services
 
         public async Task<GetAllSurveyResponseDto> GetAllSurveyPrivateAsync(GetAllSurveyRequestDto model)
         {
-            var surveys = _surveyReadRepository.GetAll(false)
+
+            var surveys = await _surveyReadRepository.GetAll(false)
               .Where(s => s.Visibility.State == VisibilityStat.Private.ToString() && s.SurveyStatus.SurveyStatuse == Status.Open.ToString())
               .Skip(model.Size * model.Page)
               .Take(model.Size)
@@ -182,7 +183,7 @@ namespace SurveyApi.Persistence.Services
                   Id = s.SurveyId,
                   Name = s.Name,
                   Description = s.Description,
-              }).ToList();
+              }).ToListAsync();
 
             int count = surveys.Count();
             return new()
