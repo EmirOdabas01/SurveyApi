@@ -76,7 +76,12 @@ namespace SurveyApi.Persistence.Services
             return new GroupListDto
             {
                 Count = groups.Count(),
-                Groups = groups
+                Groups = await groups.Select(g => new
+                {
+                    Id = g.Id,
+                    Name = g.Name,
+                    Description = g.Description,
+                }).ToListAsync()
             };
         }
 
@@ -92,7 +97,7 @@ namespace SurveyApi.Persistence.Services
                     Id = g.Id,
                     Name = g.Name,
                     Description = g.Description,
-                })
+                }).ToList()
             };
         }
 

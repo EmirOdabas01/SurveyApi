@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SurveyApi.Application.Features.Commands.Group.EnrollToGroup
 {
-    public class EnrollGroupCommandHandler : IRequestHandler<LeaveGroupCommandRequest, LeaveGroupCommandResponse>
+    public class EnrollGroupCommandHandler : IRequestHandler<EnrollGroupCommandRequest, EnrollGroupCommandResponse>
     {
         private readonly IGroupService _groupService;
 
@@ -18,7 +18,7 @@ namespace SurveyApi.Application.Features.Commands.Group.EnrollToGroup
             _groupService = groupService;
         }
 
-        public async Task<LeaveGroupCommandResponse> Handle(LeaveGroupCommandRequest request, CancellationToken cancellationToken)
+        public async Task<EnrollGroupCommandResponse> Handle(EnrollGroupCommandRequest request, CancellationToken cancellationToken)
         {
             await _groupService.EnrollGroupAsync(request.GroupId);
             return new();

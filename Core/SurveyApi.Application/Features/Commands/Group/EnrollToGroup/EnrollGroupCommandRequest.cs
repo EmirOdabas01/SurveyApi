@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SurveyApi.Application.Features.Commands.Group.EnrollToGroup
 {
-    public class EnrollGroupCommandRequest : IRequest<LeaveGroupCommandResponse>
+    public class EnrollGroupCommandRequest : IRequest<EnrollGroupCommandResponse>
     {
         public int GroupId { get; set; }
     }

@@ -43,15 +43,15 @@ namespace SurveyApi.Api.Controllers
             return Ok(response);
         }
 
-        [HttpPut]
-        public async Task<IActionResult> EnrollToGroup(EnrollGroupCommandRequest enrollGroupCommandRequest)
+        [HttpPut("{GroupId}")]
+        public async Task<IActionResult> EnrollToGroup([FromRoute] EnrollGroupCommandRequest enrollGroupCommandRequest)
         {
             var response = await _mediator.Send(enrollGroupCommandRequest);
             return Ok(response);
         }
 
-        [HttpPut]
-        public async Task<IActionResult> LeaveGroup(LeaveGroupCommandRequest leaveGroupCommandRequest)
+        [HttpPut("{GroupId}")]
+        public async Task<IActionResult> LeaveGroup([FromRoute] LeaveGroupCommandRequest leaveGroupCommandRequest)
         {
             var response = await _mediator.Send(leaveGroupCommandRequest);
             return Ok(response);
