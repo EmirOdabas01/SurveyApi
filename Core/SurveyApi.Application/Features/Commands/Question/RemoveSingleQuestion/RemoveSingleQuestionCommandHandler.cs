@@ -28,7 +28,7 @@ namespace SurveyApi.Application.Features.Commands.Question.RemoveSingleQuestion
 
             var questionToRemove = survey?.Questions.Where(q => q.Id == request.Id).FirstOrDefault();
 
-            if (questionToRemove == null || survey?.SurveyStatusId != Convert.ToInt32(Status.Planned))
+            if (questionToRemove == null || survey?.SurveyStatusId != (int)Status.Planned)
                 throw new Exception();
 
             survey.Questions.Remove(questionToRemove);

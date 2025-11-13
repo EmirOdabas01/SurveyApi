@@ -14,5 +14,6 @@ namespace SurveyApi.Domain.Entities.Identity
         public DateTime? RefreshTokenEndDate { get; set; }
         public ICollection<Survey> Surveys { get; set; }
         public ICollection<Group> Groups { get; set; }
+        public ICollection<Response>? Responses { get; set; }
     }
 }

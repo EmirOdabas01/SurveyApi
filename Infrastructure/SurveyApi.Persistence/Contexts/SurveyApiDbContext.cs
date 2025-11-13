@@ -116,26 +116,32 @@ namespace SurveyApi.Persistence.Contexts
                 .IsRequired(true)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Responses)
+                .WithOne(r => r.User)
+                .HasForeignKey(r => r.UserId)
+                .OnDelete(DeleteBehavior.SetNull);
+
             modelBuilder.Entity<SurveyStatus>()
                 .HasData(
-                new { Id = Convert.ToInt32(Status.Planned), SurveyStatuse = Status.Planned.ToString() },
-                new { Id = Convert.ToInt32(Status.Open), SurveyStatuse = Status.Open.ToString() },
-                new { Id = Convert.ToInt32(Status.Closed), SurveyStatuse = Status.Closed.ToString()}
+                new { Id = (int)Status.Planned, SurveyStatuse = nameof(Status.Planned)},
+                new { Id = (int)Status.Open, SurveyStatuse = nameof(Status.Open) },
+                new { Id = (int)Status.Closed, SurveyStatuse = nameof(Status.Closed)}
                 );
 
             modelBuilder.Entity<QuestionType>()
                 .HasData(
-                new { Id = Convert.ToInt32(QuestType.Open), Type = QuestType.Open.ToString() },
-                new { Id = Convert.ToInt32(QuestType.Dropdown), Type = QuestType.Dropdown.ToString() },
-                new { Id = Convert.ToInt32(QuestType.MultipleChoice), Type = QuestType.MultipleChoice.ToString()},
-                new { Id = Convert.ToInt32(QuestType.Logical), Type = QuestType.Logical.ToString() }
+                new { Id = (int)QuestType.Open, Type = nameof(QuestType.Open) },
+                new { Id = (int)QuestType.Dropdown, Type = nameof(QuestType.Dropdown) },
+                new { Id =  (int) QuestType.MultipleChoice, Type = nameof(QuestType.MultipleChoice)},
+                new { Id = (int) QuestType.Logical, Type = nameof(QuestType.Logical) }
                 );
 
             modelBuilder.Entity<Visibility>()
                 .HasData(
-                new {Id = Convert.ToInt32(VisibilityStat.Public), State = VisibilityStat.Public.ToString()},
-                new {Id = Convert.ToInt32(VisibilityStat.Group), State = VisibilityStat.Group.ToString()},
-                new {Id = Convert.ToInt32(VisibilityStat.Private), State = VisibilityStat.Private.ToString()}
+                new {Id = (int)VisibilityStat.Public, State = nameof(VisibilityStat.Public)},
+                new {Id = (int)VisibilityStat.Group, State = nameof(VisibilityStat.Group)},
+                new {Id = (int)VisibilityStat.Private, State = nameof(VisibilityStat.Private)}
                 );
 
             base.OnModelCreating(modelBuilder);
@@ -148,7 +154,7 @@ namespace SurveyApi.Persistence.Contexts
             {
                 if(data.State == EntityState.Added)
                 {
-                    data.Entity.SurveyStatusId = Convert.ToInt32(Status.Planned);
+                    data.Entity.SurveyStatusId = (int)Status.Planned;
                 }
             }
 

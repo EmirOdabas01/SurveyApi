@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SurveyApi.Application.Features.Commands.Answers;
+using SurveyApi.Application.Features.Commands.Response;
 
 namespace SurveyApi.Api.Controllers
 {
@@ -14,6 +15,13 @@ namespace SurveyApi.Api.Controllers
         public SurveyStateController(IMediator mediator)
         {
             _mediator = mediator;
+        }
+
+        [HttpPost("{SurveyId}")]
+        public async Task<IActionResult> StartSurvey([FromRoute] StartSurveyCommandRequest startSurveyCommandRequest)
+        {
+            var response = await _mediator.Send(startSurveyCommandRequest);
+            return Ok(response);
         }
 
         [HttpPost]

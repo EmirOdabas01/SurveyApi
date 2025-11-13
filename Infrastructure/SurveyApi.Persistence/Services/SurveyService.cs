@@ -112,7 +112,7 @@ namespace SurveyApi.Persistence.Services
         public async Task<GetAllSurveyResponseDto> GetAllSurveyAsync(GetAllSurveyRequestDto model)
         {
             var surveys = await _surveyReadRepository.GetAll(false)
-               .Where(s => s.Visibility.State == VisibilityStat.Public.ToString() && s.SurveyStatus.SurveyStatuse == Status.Open.ToString())
+               .Where(s => s.Visibility.State == nameof(VisibilityStat.Public) && s.SurveyStatus.SurveyStatuse == nameof(Status.Open))
                .Skip(model.Size * model.Page)
                .Take(model.Size)
                .Select(s => new {
@@ -144,8 +144,8 @@ namespace SurveyApi.Persistence.Services
                 .SelectMany(g => g.Users)
                 .Where(u => u.Id != user.Id)
                 .SelectMany(u => u.Surveys)
-                .Where(s => s.Visibility.State == VisibilityStat.Group.ToString() &&
-                           s.SurveyStatus.SurveyStatuse == Status.Open.ToString())
+                .Where(s => s.Visibility.State == nameof(VisibilityStat.Group) &&
+                           s.SurveyStatus.SurveyStatuse == nameof(Status.Open))
                 .GroupBy(s => s.SurveyId)
                 .Select(g => g.First())
                 .Select(s => new
@@ -168,7 +168,7 @@ namespace SurveyApi.Persistence.Services
         {
 
             var surveys = await _surveyReadRepository.GetAll(false)
-              .Where(s => s.Visibility.State == VisibilityStat.Private.ToString() && s.SurveyStatus.SurveyStatuse == Status.Open.ToString())
+              .Where(s => s.Visibility.State == nameof(VisibilityStat.Private) && s.SurveyStatus.SurveyStatuse == nameof(Status.Open))
               .Skip(model.Size * model.Page)
               .Take(model.Size)
               .Select(s => new {
@@ -268,7 +268,7 @@ namespace SurveyApi.Persistence.Services
             if (survey == null)
                 throw new Exception();
 
-            if (survey.SurveyStatus.SurveyStatuse != Status.Planned.ToString())
+            if (survey.SurveyStatus.SurveyStatuse != nameof(Status.Planned))
             {
                 var questions = survey.Questions.ToList();
 
@@ -299,7 +299,7 @@ namespace SurveyApi.Persistence.Services
                 .Include(s => s.SurveyStatus)
                 .FirstOrDefaultAsync();
 
-            if (survey?.SurveyStatus.SurveyStatuse != Status.Planned.ToString())
+            if (survey?.SurveyStatus.SurveyStatuse != nameof(Status.Planned))
                 throw new Exception();
 
             survey.Name = model.Name;
@@ -340,6 +340,7 @@ namespace SurveyApi.Persistence.Services
                 throw new SurveyNotFoundException();
 
             survey.SurveyStatusId = (int)Status.Open;
+            survey.StartDate = DateTime.UtcNow;
             int success = await _surveyWriteRepository.SaveAsync();
 
             if (success > 0)
@@ -356,6 +357,7 @@ namespace SurveyApi.Persistence.Services
                 throw new SurveyNotFoundException();
 
             survey.SurveyStatusId = (int)Status.Closed;
+            survey.EndDate = DateTime.UtcNow;
             int success = await _surveyWriteRepository.SaveAsync();
 
             if (success > 0)

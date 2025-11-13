@@ -28,7 +28,7 @@ namespace SurveyApi.Application.Features.Commands.Question.DeleteQuestions
         {
             var survey = await _surveyReadRepository.Table.Include(s => s.Questions).FirstOrDefaultAsync(s => s.SurveyId == Guid.Parse(request.Id));
 
-            if (survey == null || survey.SurveyStatusId != Convert.ToInt32(Status.Planned))
+            if (survey == null || survey.SurveyStatusId != (int)Status.Planned)
                 throw new Exception();
 
             _questionWriteRepository.RemoveRange(survey.Questions.ToList());

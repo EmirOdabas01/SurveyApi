@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SurveyApi.Application.Abstractions.Services;
+using SurveyApi.Application.Enums;
 using SurveyApi.Application.Features.Commands.Survey.CloseSurvey;
 using SurveyApi.Application.Features.Commands.Survey.CreateSurvey;
 using SurveyApi.Application.Features.Commands.Survey.PublishSurvey;

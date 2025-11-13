@@ -26,7 +26,7 @@ namespace SurveyApi.Application.Features.Commands.Question.UpdateQuestions
         {
             var survey = await _surveyReadRepository.GetByIdAsync(request.SurveyId, true);
 
-            if (survey == null || survey.SurveyStatusId != Convert.ToInt32(Status.Planned))
+            if (survey == null || survey.SurveyStatusId != (int)Status.Planned)
                 throw new Exception();
                  
             foreach (var question in request.Questions)
