@@ -11,6 +11,7 @@ using SurveyApi.Application.Features.Commands.Survey.RemoveSurvey;
 using SurveyApi.Application.Features.Commands.Survey.UpdateSurvey;
 using SurveyApi.Application.Features.Commands.SurveyImage.RemoveSurveyImage;
 using SurveyApi.Application.Features.Commands.SurveyImage.UploadSurveyImage;
+using SurveyApi.Application.Features.Queries.Survey.AnalyzeSurvey;
 using SurveyApi.Application.Features.Queries.Survey.GetAllSurvey;
 using SurveyApi.Application.Features.Queries.Survey.GetAllSurveyCreatedByUser;
 using SurveyApi.Application.Features.Queries.Survey.GetAllSurveyForGroups;
@@ -146,6 +147,13 @@ namespace SurveyApi.Api.Controllers
         public async Task<IActionResult> CloseSurvey([FromRoute] CloseSurveyCommandRequest closeSurveyCommandRequest)
         {
             var response = await _mediator.Send(closeSurveyCommandRequest);
+            return Ok(response);
+        }
+
+        [HttpGet("{SurveyId}")]
+        public async Task<IActionResult> AnalyzeSurvey([FromRoute] AnalyzeSurveyQueryRequest analyzeSurveyQueryRequest)
+        {
+            var response = _mediator.Send(analyzeSurveyQueryRequest);
             return Ok(response);
         }
     }
