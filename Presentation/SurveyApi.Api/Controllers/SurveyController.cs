@@ -51,7 +51,7 @@ namespace SurveyApi.Api.Controllers
         }
 
         [HttpGet]
-        [Authorize(AuthenticationSchemes = "Admin")]
+        // [Authorize(AuthenticationSchemes = "Admin")]
         public async Task<IActionResult> GetAllSurveyPrivate([FromRoute] GetAllSurveyPrivateQueryRequest getAllSurveyPrivateQueryRequest)
         {
             var result = await _mediator.Send(getAllSurveyPrivateQueryRequest);
@@ -59,7 +59,7 @@ namespace SurveyApi.Api.Controllers
         }
 
         [HttpGet]
-        [Authorize(AuthenticationSchemes = "Admin")]
+        //[Authorize(AuthenticationSchemes = "Admin")]
         public async Task<IActionResult> GetAllSurveysForGroups([FromRoute]GetAllSurveyForGroupsQueryRequest getAllSurveyForGroupsQueryRequest)
         {
             var result = await _mediator.Send(getAllSurveyForGroupsQueryRequest);
@@ -73,14 +73,14 @@ namespace SurveyApi.Api.Controllers
             return Ok(result);
         }
         [HttpGet("{id}")]
-        [Authorize(AuthenticationSchemes = "Admin")]
+        //[Authorize(AuthenticationSchemes = "Admin")]
         public async Task<IActionResult> GetSurveyByIdDetail([FromRoute] GetSurveyByIdDetailQueryRequest getSurveyByIdDetailQueryRequest)
         {
             var result = await _mediator.Send(getSurveyByIdDetailQueryRequest);
             return Ok(result);
         }
         [HttpPost]
-        [Authorize(AuthenticationSchemes = "Admin")]
+        // [Authorize(AuthenticationSchemes = "Admin")]
         public async Task<IActionResult> CreateSurvey([FromBody] CreateSurveyCommandRequest createSurveyCommandRequest)
         {
 
@@ -88,14 +88,14 @@ namespace SurveyApi.Api.Controllers
             return Ok(result);
         }
         [HttpDelete("{Id}")]
-        [Authorize(AuthenticationSchemes = "Admin")]
+        // [Authorize(AuthenticationSchemes = "Admin")]
         public async Task<IActionResult> RemoveSurvey([FromRoute] RemoveSurveyCommandRequest removeSurveyCommandRequest)
         {
             var result = await _mediator.Send(removeSurveyCommandRequest);
             return Ok(result);
         }
         [HttpPut]
-        [Authorize(AuthenticationSchemes = "Admin")]
+        //  [Authorize(AuthenticationSchemes = "Admin")]
         public async Task<IActionResult> UpdateSurvey([FromBody] UpdateSurveyCommandRequest updateSurveyCommandRequest)
         {
             var result = await _mediator.Send(updateSurveyCommandRequest);
@@ -103,7 +103,7 @@ namespace SurveyApi.Api.Controllers
         }
 
         [HttpPost]
-        [Authorize(AuthenticationSchemes = "Admin")]
+        //[Authorize(AuthenticationSchemes = "Admin")]
         public async Task<IActionResult> UploadSurveyImage([FromQuery] UploadSurveyImageCommandRequest uploadSurveyImageCommandRequest)
         {
             uploadSurveyImageCommandRequest.Files = Request.Form.Files;
@@ -119,7 +119,7 @@ namespace SurveyApi.Api.Controllers
         }
 
         [HttpDelete]
-        [Authorize(AuthenticationSchemes = "Admin")]
+        //[Authorize(AuthenticationSchemes = "Admin")]
         public async Task<IActionResult> RemoveSurveyImage([FromQuery] RemoveSurveyIMageCommandRequest removeSurveyIMageCommandRequest)
         {
             var response = await _mediator.Send(removeSurveyIMageCommandRequest);
@@ -127,7 +127,7 @@ namespace SurveyApi.Api.Controllers
         }
 
         [HttpGet]
-        [Authorize(AuthenticationSchemes = "Admin")]
+        //[Authorize(AuthenticationSchemes = "Admin")]
         public async Task<IActionResult> GetUserSurveys([FromRoute]GetAllSurveyCreatedByUserQueryRequest getAllSurveyCreatedByUserQueryRequest)
         {
             var response = await _mediator.Send(getAllSurveyCreatedByUserQueryRequest);
@@ -135,7 +135,7 @@ namespace SurveyApi.Api.Controllers
         }
 
         [HttpPut("{SurveyId}")]
-        [Authorize(AuthenticationSchemes = "Admin")]
+        // [Authorize(AuthenticationSchemes = "Admin")]
         public async Task<IActionResult> PublishSurvey([FromRoute] PublishSurveyCommandRequest publishSurveyCommandRequest)
         {
             var response = await _mediator.Send(publishSurveyCommandRequest);
@@ -143,7 +143,7 @@ namespace SurveyApi.Api.Controllers
         }
 
         [HttpPut("{SurveyId}")]
-        [Authorize(AuthenticationSchemes = "Admin")]
+       // [Authorize(AuthenticationSchemes = "Admin")]
         public async Task<IActionResult> CloseSurvey([FromRoute] CloseSurveyCommandRequest closeSurveyCommandRequest)
         {
             var response = await _mediator.Send(closeSurveyCommandRequest);
@@ -153,7 +153,7 @@ namespace SurveyApi.Api.Controllers
         [HttpGet("{SurveyId}")]
         public async Task<IActionResult> AnalyzeSurvey([FromRoute] AnalyzeSurveyQueryRequest analyzeSurveyQueryRequest)
         {
-            var response = _mediator.Send(analyzeSurveyQueryRequest);
+            var response = await _mediator.Send(analyzeSurveyQueryRequest);
             return Ok(response);
         }
     }

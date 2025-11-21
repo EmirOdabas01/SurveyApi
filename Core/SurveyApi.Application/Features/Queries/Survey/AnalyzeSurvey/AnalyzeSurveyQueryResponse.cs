@@ -9,6 +9,7 @@ namespace SurveyApi.Application.Features.Queries.Survey.AnalyzeSurvey
 {
     public class AnalyzeSurveyQueryResponse
     {
-        public FullSurveyAnalysisDto FullSurveyAnalysis { get; set; }
+        public  QuestionAnalysisDto QuestionAnalysis { get; set; }
+        public StatisticAnalysisDto StatisticAnalysis { get; set; }
     }
 }

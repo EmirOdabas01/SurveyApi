@@ -24,20 +24,19 @@ namespace SurveyApi.Infrastructure.Services.SurveyAnalysis
         public async Task<StatisticAnalysisDto> AnalyzeSurvey(string SurveyId)
         {
             var responses = await _responseReadRepository
-                .GetWhere(r => r.SurveyId == Guid.Parse(SurveyId))
-                .ToListAsync();
-
+                .GetWhere(r => r.SurveyId == Guid.Parse(SurveyId)).ToListAsync();
+              
             if (responses == null)
                 throw new AnalysisFailException("There is no response yet");
 
             int totalResponse = responses.Count;
             int finishedCount = responses.Count(r => r.EndDate != null);
 
-            TimeSpan? totalTime = default;
+            TimeSpan totalTime = TimeSpan.Zero;
             foreach(var data in responses)
             {
                 if(data.EndDate != null)
-                    totalTime += data.EndDate - data.BeginDate;
+                    totalTime += data.EndDate.Value - data.BeginDate;
             }
              
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SurveyApi.Application.DTOs.SurveyAnalysis.QuestionAnalysis;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,9 +9,7 @@ namespace SurveyApi.Application.DTOs.SurveyAnalysis
 {
     public class QuestionAnalysisDto
     {
-        public List<((string, int), List<(string, double)>)> QuestionOptionsSelectionRatio { get; set; } = new();
-        public List<(string, int, string)> MostSelectedOption { get; set; } = new();
-        public List<(string, int, string)> LeastSelectedOption { get; set; } = new();
-        public Double UnSolvedQuestionRatio { get; set; }
+        public List<SingleQuestionAnalysisDto> SingleQuestionAnalysis { get; set; } = new();
+        public Double UnsolvedRatio { get; set; }
     }
 }

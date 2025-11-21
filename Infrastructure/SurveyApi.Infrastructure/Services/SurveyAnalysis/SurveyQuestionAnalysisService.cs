@@ -2,6 +2,7 @@
 using SurveyApi.Application.Abstractions.Services;
 using SurveyApi.Application.Abstractions.Services.SurveyAnalysis;
 using SurveyApi.Application.DTOs.SurveyAnalysis;
+using SurveyApi.Application.DTOs.SurveyAnalysis.QuestionAnalysis;
 using SurveyApi.Application.Enums;
 using SurveyApi.Application.Exceptions;
 using SurveyApi.Application.Repositories;
@@ -22,9 +23,10 @@ namespace SurveyApi.Infrastructure.Services.SurveyAnalysis
         {
             _surveyReadRepository = surveyReadRepository;
         }
-
+        
         public async Task<QuestionAnalysisDto> AnalyzeSurvey(string SurveyId)
         {
+
             var survey = await _surveyReadRepository
                 .GetWhere(s => s.SurveyId == Guid.Parse(SurveyId))
                 .Include(s => s.Questions)
@@ -36,75 +38,45 @@ namespace SurveyApi.Infrastructure.Services.SurveyAnalysis
 
             if (survey == null)
                 throw new AnalysisFailException("Survey not Found");
+            else if (survey.SurveyStatusId != (int)Status.Closed)
+                throw new AnalysisFailException("Survey must be closed to get analyzed");
+               
 
-           
+            var optionQuestions = survey.Questions.Where(q => q.QuestionTypeId != (int)QuestType.Open).ToList();
 
-            List<(string, int, string)> mostSelectedOptions = new();
-            List<(string, int, string)> leastSelectedOptions = new();
-            List<((string, int), List<(string, double)>)> questionOptionsSelectionRatio = new();
+            if (optionQuestions.Any(q => q.QuestionOptions == null))
+                throw new AnalysisFailException("Unfinished survey can not be analyzed");
 
-            var notOpenQuestions = survey.Questions.Where(q => q.QuestionTypeId != (int)QuestType.Open)
-               .Select(q => q).ToList();
-
-            foreach (var data in notOpenQuestions)
+            QuestionAnalysisDto questionAnalysis = new();
+            foreach(var question in optionQuestions)
             {
-                Dictionary<int, int> optionAnswersCount = new();
-                foreach(var answer in data.Answers)
+                int totalAnswerCount = question.QuestionOptions.Sum(qo => qo.AnswerOptions?.Count ?? 0);
+
+                SingleQuestionAnalysisDto singleQuestionAnalysis = new()
                 {
-                    
-                    foreach(var answerOption in answer.AnswerOptions)
+                    QuestionText = question.QuestionText,
+                    Order = question.Order
+                };
+
+                foreach(var option in question.QuestionOptions)
+                {
+                    if (option.AnswerOptions == null)
+                        continue;
+
+                    OptionAnalysisInfoDto optionAnalysisInfo = new() 
                     {
-                        if(!optionAnswersCount.ContainsKey(answerOption.QuestionOptionId))
-                        {
-                            optionAnswersCount.Add(answerOption.QuestionOptionId, 1);
-                        }
-                        else
-                        {
-                            optionAnswersCount[answerOption.QuestionOptionId]++;
-                        }
-                    }
+                        OptionText = option.Value,
+                        Order = option.Order,
+                        Ratio = (double)option.AnswerOptions.Count * 100 / totalAnswerCount
+                    };
+                    singleQuestionAnalysis.OptionAnalysisİnfo.Add(optionAnalysisInfo);
                 }
 
-                List<(string, double)> optionsSelectionRatio = new();
-                foreach (var pair in optionAnswersCount)
-                {
-                   double ratio = (int)pair.Value * 100 / optionAnswersCount.Values.Sum();
-                   string optionName = data.QuestionOptions.FirstOrDefault(qo => qo.Id == pair.Key).Value;
-                    optionsSelectionRatio.Add((optionName, ratio));  
-                }
-
-                questionOptionsSelectionRatio.Add(((data.QuestionText, data.Order), optionsSelectionRatio));
-
-                int max = optionAnswersCount.Values.Max();
-                int min = optionAnswersCount.Values.Min();
-
-                int maxId = optionAnswersCount.First(k => k.Value == max).Key;
-                int minId = optionAnswersCount.First(k => k.Value == min).Key;
-
-                // Logical 
-                if(maxId == minId)
-                {
-                    minId = optionAnswersCount.Last(k => k.Value == min).Key;
-                }
-
-                var minSelected = data.QuestionOptions.First(qo => qo.Id == minId);
-                var maxSelected = data.QuestionOptions.First(qo => qo.Id == maxId);
-
-                mostSelectedOptions.Add((data.QuestionText, maxSelected.Order, maxSelected.Value));
-                leastSelectedOptions.Add((data.QuestionText, minSelected.Order, minSelected.Value));
+                questionAnalysis.SingleQuestionAnalysis.Add(singleQuestionAnalysis);
             }
+            questionAnalysis.UnsolvedRatio = (double)optionQuestions.Count(q => q.Answers == null) * 100/ optionQuestions.Count;
 
-            int unSolvedQuestionsCount = notOpenQuestions.Count(q => q.Answers == null);
-            Double unSolvedRatio = (double)unSolvedQuestionsCount * 100 / notOpenQuestions.Count;
-
-            return new QuestionAnalysisDto
-            {
-                QuestionOptionsSelectionRatio = questionOptionsSelectionRatio,
-                LeastSelectedOption = leastSelectedOptions,
-                MostSelectedOption = mostSelectedOptions,
-                UnSolvedQuestionRatio = unSolvedRatio
-            };
-
+            return questionAnalysis;
         }
     }
 }

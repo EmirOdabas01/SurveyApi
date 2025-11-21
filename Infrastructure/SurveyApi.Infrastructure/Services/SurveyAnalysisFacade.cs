@@ -23,15 +23,14 @@ namespace SurveyApi.Infrastructure.Services
 
         public async Task<FullSurveyAnalysisDto> GetFullAnalysisAsync(string surveyId)
         {
-            var statisticAnalysisTask = _surveyStatisticsService.AnalyzeSurvey(surveyId);
-            var questionAnalysisTask = _surveyQuestionAnalysisService.AnalyzeSurvey(surveyId);
+            var statisticAnalysis = await _surveyStatisticsService.AnalyzeSurvey(surveyId);
+            var questionAnalysis = await _surveyQuestionAnalysisService.AnalyzeSurvey(surveyId);
 
-            await Task.WhenAll(statisticAnalysisTask, questionAnalysisTask);
 
             return new FullSurveyAnalysisDto
             {
-                StatisticAnalysis = statisticAnalysisTask.Result,
-                QuestionAnalysis = questionAnalysisTask.Result
+                StatisticAnalysis = statisticAnalysis,
+                 QuestionAnalysis = questionAnalysis
             };
         }
     }
