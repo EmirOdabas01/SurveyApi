@@ -20,6 +20,7 @@ namespace SurveyApi.Infrastructure
             services.AddScoped<ITokenHandler, TokenHandler>();
             services.AddScoped<ISurveyStatisticsService, SurveyStatisticsService>();
             services.AddScoped<ISurveyQuestionAnalysisService, SurveyQuestionAnalysisService>();
+            services.AddScoped<ISurveyOpenQuestionAnalysis, SurveyOpenQuestionAnalysis>();
         }
     }
 }

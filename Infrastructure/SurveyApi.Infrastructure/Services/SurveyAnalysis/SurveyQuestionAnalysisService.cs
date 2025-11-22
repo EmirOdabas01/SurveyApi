@@ -60,16 +60,13 @@ namespace SurveyApi.Infrastructure.Services.SurveyAnalysis
 
                 foreach(var option in question.QuestionOptions)
                 {
-                    if (option.AnswerOptions == null)
-                        continue;
-
-                    OptionAnalysisInfoDto optionAnalysisInfo = new() 
+                    OptionAnalysisInfoDto optionAnalysisInfo = new()
                     {
                         OptionText = option.Value,
                         Order = option.Order,
-                        Ratio = (double)option.AnswerOptions.Count * 100 / totalAnswerCount
+                        Ratio = (double)(option.AnswerOptions?.Count ?? 0) * 100 / totalAnswerCount
                     };
-                    singleQuestionAnalysis.OptionAnalysisİnfo.Add(optionAnalysisInfo);
+                    singleQuestionAnalysis.OptionAnalysisInfo.Add(optionAnalysisInfo);
                 }
 
                 questionAnalysis.SingleQuestionAnalysis.Add(singleQuestionAnalysis);

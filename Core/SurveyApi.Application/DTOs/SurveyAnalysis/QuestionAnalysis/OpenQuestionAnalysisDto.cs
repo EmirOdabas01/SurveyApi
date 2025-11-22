@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace SurveyApi.Application.DTOs.SurveyAnalysis.QuestionAnalysis
 {
-    public class SingleQuestionAnalysisDto
+    public class OpenQuestionAnalysisDto
     {
         public string QuestionText { get; set; }
         public int Order { get; set; }
-        public List<OptionAnalysisInfoDto> OptionAnalysisInfo { get; set; } = new();
+        public List<string?> Answers { get; set; }
     }
 }

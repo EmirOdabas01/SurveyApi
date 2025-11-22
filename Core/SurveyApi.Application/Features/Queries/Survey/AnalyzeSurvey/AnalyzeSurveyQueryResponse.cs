@@ -1,4 +1,5 @@
 ﻿using SurveyApi.Application.DTOs.SurveyAnalysis;
+using SurveyApi.Application.DTOs.SurveyAnalysis.QuestionAnalysis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,6 @@ namespace SurveyApi.Application.Features.Queries.Survey.AnalyzeSurvey
     {
         public  QuestionAnalysisDto QuestionAnalysis { get; set; }
         public StatisticAnalysisDto StatisticAnalysis { get; set; }
+        public List<OpenQuestionAnalysisDto> OpenQuestionAnalysis { get; set; }
     }
 }

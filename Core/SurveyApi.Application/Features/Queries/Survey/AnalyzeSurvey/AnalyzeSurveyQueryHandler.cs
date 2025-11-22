@@ -15,19 +15,25 @@ namespace SurveyApi.Application.Features.Queries.Survey.AnalyzeSurvey
     {
         private readonly ISurveyStatisticsService _surveyStatisticsService;
         private readonly ISurveyQuestionAnalysisService _surveyQuestionAnalysisService;
-        public AnalyzeSurveyQueryHandler(ISurveyStatisticsService surveyStatisticsService, ISurveyQuestionAnalysisService surveyQuestionAnalysisService)
+        private readonly ISurveyOpenQuestionAnalysis _surveyOpenQuestionAnalysis;
+        public AnalyzeSurveyQueryHandler(ISurveyStatisticsService surveyStatisticsService, 
+            ISurveyQuestionAnalysisService surveyQuestionAnalysisService, 
+            ISurveyOpenQuestionAnalysis surveyOpenQuestionAnalysis)
         {
             _surveyStatisticsService = surveyStatisticsService;
             _surveyQuestionAnalysisService = surveyQuestionAnalysisService;
+            _surveyOpenQuestionAnalysis = surveyOpenQuestionAnalysis;
         }
 
         public async Task<AnalyzeSurveyQueryResponse> Handle(AnalyzeSurveyQueryRequest request, CancellationToken cancellationToken)
         {
             var statisticAnalysis = await _surveyStatisticsService.AnalyzeSurvey(request.SurveyId);
             var questionAnalysis = await _surveyQuestionAnalysisService.AnalyzeSurvey(request.SurveyId);
+            var openQuestionAnalysis = await _surveyOpenQuestionAnalysis.AnalyzeSurvey(request.SurveyId);
 
             return new AnalyzeSurveyQueryResponse
             {
+                OpenQuestionAnalysis = openQuestionAnalysis,
                 StatisticAnalysis = statisticAnalysis,
                 QuestionAnalysis = questionAnalysis
             };
