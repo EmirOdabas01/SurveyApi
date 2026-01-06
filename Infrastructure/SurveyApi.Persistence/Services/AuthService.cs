@@ -1,9 +1,11 @@
 ﻿using Azure.Core;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SurveyApi.Application.Abstractions;
 using SurveyApi.Application.Abstractions.Services;
 using SurveyApi.Application.DTOs;
+using SurveyApi.Application.DTOs.User;
 using SurveyApi.Application.Exceptions;
 using SurveyApi.Application.Features.Commands.User.LoginUser;
 using System;
@@ -21,16 +23,38 @@ namespace SurveyApi.Persistence.Services
         private readonly SignInManager<Identity.User> _signInManager;
         private readonly ITokenHandler _tokenHandler;
         private readonly IUserService _userService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         public AuthService(SignInManager<Identity.User> signInManager,
             UserManager<Identity.User> userManager,
             ITokenHandler tokenHandler,
-            IUserService userService)
+            IUserService userService,
+            IHttpContextAccessor httpContextAccessor)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _tokenHandler = tokenHandler;
             _userService = userService;
+            _httpContextAccessor = httpContextAccessor;
         }
+
+        public async Task<UserInfoDto?> GetUserInfo()
+        {
+            var userName = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
+            if (string.IsNullOrEmpty(userName))
+                throw new Exception("Unknown Error");
+
+            var user = await _userManager.FindByNameAsync(userName);
+            if (user == null)
+                return null;
+
+            return new UserInfoDto
+            {
+                NameSurname = user.NameSurname,
+                UserName = user.UserName,
+                EMail = user.Email
+            };
+        }
+
         public async Task<Token> LoginAsync(string nameOrEmail, string password, int tokenLifeTime)
         {
             var user = await _userManager.FindByNameAsync(nameOrEmail);

@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using SurveyApi.Application.Abstractions.Services;
 using SurveyApi.Application.DTOs.Survey;
 using SurveyApi.Application.DTOs.SurveyImage;
+using SurveyApi.Application.DTOs.User;
 using SurveyApi.Application.Enums;
 using SurveyApi.Application.Exceptions;
 using SurveyApi.Application.Features.Commands.Survey.CloseSurvey;
@@ -365,5 +366,6 @@ namespace SurveyApi.Persistence.Services
 
             return false;
         }
+
     }
 }

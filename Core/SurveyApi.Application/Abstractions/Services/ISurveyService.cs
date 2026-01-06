@@ -1,5 +1,6 @@
 ﻿using SurveyApi.Application.DTOs.Survey;
 using SurveyApi.Application.DTOs.SurveyImage;
+using SurveyApi.Application.DTOs.User;
 using SurveyApi.Application.Features.Commands.Survey.CloseSurvey;
 using SurveyApi.Application.Features.Commands.Survey.CreateSurvey;
 using SurveyApi.Application.Features.Commands.Survey.PublishSurvey;

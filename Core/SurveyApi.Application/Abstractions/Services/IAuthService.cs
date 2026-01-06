@@ -1,4 +1,5 @@
 ﻿using SurveyApi.Application.DTOs;
+using SurveyApi.Application.DTOs.User;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,7 @@ namespace SurveyApi.Application.Abstractions.Services
     {
         Task<Token> LoginAsync(string nameOrEmail, string password, int tokenLifeTime);
         Task<Token> LoginRefreshTokenAsync(string refreshToken);
+        Task<UserInfoDto?> GetUserInfo();
+
     }
 }
