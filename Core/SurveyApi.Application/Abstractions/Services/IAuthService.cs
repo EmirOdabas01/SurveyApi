@@ -13,6 +13,7 @@ namespace SurveyApi.Application.Abstractions.Services
         Task<Token> LoginAsync(string nameOrEmail, string password, int tokenLifeTime);
         Task<Token> LoginRefreshTokenAsync(string refreshToken);
         Task<UserInfoDto?> GetUserInfo();
+        Task LogOut();
 
     }
 }

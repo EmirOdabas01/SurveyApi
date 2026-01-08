@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SurveyApi.Application.Features.Commands.User.LoginUser;
+using SurveyApi.Application.Features.Commands.User.LogOut;
 using SurveyApi.Application.Features.Commands.User.RefreshTokenLogin;
 using SurveyApi.Application.Features.Queries.User.UserInfo;
 
@@ -38,6 +39,14 @@ namespace SurveyApi.Api.Controllers
         public async Task<IActionResult> Me(UserInfoQueryRequest userInfoQueryRequest)
         {
             var response = await _mediator.Send(userInfoQueryRequest);
+            return Ok(response);
+        }
+
+        [HttpPut]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        public async Task<IActionResult> LogOut(LogOutCommandRequest logOutCommandRequest)
+        {
+            var response = await _mediator.Send(logOutCommandRequest);
             return Ok(response);
         }
     }

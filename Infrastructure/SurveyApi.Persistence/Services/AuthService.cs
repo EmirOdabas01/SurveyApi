@@ -90,5 +90,20 @@ namespace SurveyApi.Persistence.Services
             else
                 throw new UserNotFoundException();
         }
+
+        public async Task LogOut()
+        {
+            var userName = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
+            if (string.IsNullOrEmpty(userName))
+                throw new Exception("Unknown Error");
+
+            var user = await _userManager.FindByNameAsync(userName);
+            if (user == null) return;
+
+            user.RefreshToken = null;
+            user.RefreshTokenEndDate = null;
+
+            await _userManager.UpdateAsync(user);
+        }
     }
 }

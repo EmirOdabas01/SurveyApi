@@ -5,7 +5,7 @@ using SurveyApi.Application.Features.Commands.User.CreateUser;
 
 namespace SurveyApi.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -17,7 +17,7 @@ namespace SurveyApi.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateUser(CreateUserCommandRequest createUserCommandRequest)
+        public async Task<IActionResult> Register(CreateUserCommandRequest createUserCommandRequest)
         {
             var response = await _mediator.Send(createUserCommandRequest);
             return Ok(response);
