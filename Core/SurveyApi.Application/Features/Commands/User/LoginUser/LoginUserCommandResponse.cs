@@ -13,7 +13,7 @@ namespace SurveyApi.Application.Features.Commands.User.LoginUser
 
     public class LoginUserSuccessResponse : LoginUserCommandResponse
     {
-        public Token AccessToken { get; set; }
+        public Token Token { get; set; }
     }
 
     public class LoginUserFailureResponse : LoginUserCommandResponse

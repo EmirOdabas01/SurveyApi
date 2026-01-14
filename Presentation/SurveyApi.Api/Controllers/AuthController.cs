@@ -36,17 +36,17 @@ namespace SurveyApi.Api.Controllers
 
         [HttpGet]
         [Authorize(AuthenticationSchemes = "Admin")]
-        public async Task<IActionResult> Me(UserInfoQueryRequest userInfoQueryRequest)
+        public async Task<IActionResult> Me()
         {
-            var response = await _mediator.Send(userInfoQueryRequest);
+            var response = await _mediator.Send(new UserInfoQueryRequest { });
             return Ok(response);
         }
 
         [HttpPut]
         [Authorize(AuthenticationSchemes = "Admin")]
-        public async Task<IActionResult> LogOut(LogOutCommandRequest logOutCommandRequest)
+        public async Task<IActionResult> LogOut()
         {
-            var response = await _mediator.Send(logOutCommandRequest);
+            var response = await _mediator.Send(new LogOutCommandRequest { });
             return Ok(response);
         }
     }

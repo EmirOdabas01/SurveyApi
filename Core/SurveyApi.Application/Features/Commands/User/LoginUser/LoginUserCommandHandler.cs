@@ -24,7 +24,7 @@ namespace SurveyApi.Application.Features.Commands.User.LoginUser
         public async Task<LoginUserCommandResponse> Handle(LoginUserCommandRequest request, CancellationToken cancellationToken)
         {
             var response = await _authService.LoginAsync(request.NameOrEmail, request.Password, 20);
-            return new LoginUserSuccessResponse() { AccessToken = response };
+            return new LoginUserSuccessResponse() { Token = response };
         }
     }
 }
