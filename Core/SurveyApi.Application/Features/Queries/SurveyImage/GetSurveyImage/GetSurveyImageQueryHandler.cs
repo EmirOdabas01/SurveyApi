@@ -24,7 +24,11 @@ namespace SurveyApi.Application.Features.Queries.SurveyImage.GetSurveyImage
         public async Task<GetSurveyImageQueryResponse> Handle(GetSurveyImageQueryRequest request, CancellationToken cancellationToken)
         {
             var response = await _surveyService.GetSurveyImageAsync(request.SurveyId);
-            return new();
+            return new GetSurveyImageQueryResponse
+            {
+                Id = response.Id,
+                Path = response.Path
+            };
         }
     }
 }
