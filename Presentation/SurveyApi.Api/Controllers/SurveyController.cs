@@ -60,9 +60,9 @@ namespace SurveyApi.Api.Controllers
 
         [HttpGet]
         [Authorize(AuthenticationSchemes = "Admin")]
-        public async Task<IActionResult> GetAllSurveysForGroups([FromRoute]GetAllSurveyForGroupsQueryRequest getAllSurveyForGroupsQueryRequest)
+        public async Task<IActionResult> GetAllSurveysForGroups()
         {
-            var result = await _mediator.Send(getAllSurveyForGroupsQueryRequest);
+            var result = await _mediator.Send(new GetAllSurveyForGroupsQueryRequest { });
             return Ok(result);
         }
 
