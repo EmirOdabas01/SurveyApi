@@ -30,9 +30,9 @@ namespace SurveyApi.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllGroups(GetAllGroupsQueryRequest getAllGroupsQueryRequest)
+        public async Task<IActionResult> GetAllGroups()
         {
-            var response = await _mediator.Send(getAllGroupsQueryRequest);
+            var response = await _mediator.Send(new GetAllGroupsQueryRequest { });
             return Ok(response);
         }
 
