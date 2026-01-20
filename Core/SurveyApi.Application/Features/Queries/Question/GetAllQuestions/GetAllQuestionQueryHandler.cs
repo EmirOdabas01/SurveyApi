@@ -49,6 +49,7 @@ namespace SurveyApi.Application.Features.Queries.Question.GetAllQuestions
                 {
                     Id = question.Id,
                     IsMandatory = question.IsMandatory,
+                    Type = question.QuestionTypeId,
                     Order = question.Order,
                     QuestionText = question.QuestionText,
                     QuestionOptions = questionOptions

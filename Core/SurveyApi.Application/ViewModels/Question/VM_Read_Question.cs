@@ -1,4 +1,5 @@
-﻿using SurveyApi.Application.ViewModels.QuestionOption;
+﻿using SurveyApi.Application.Enums;
+using SurveyApi.Application.ViewModels.QuestionOption;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace SurveyApi.Application.ViewModels.Question
     {
         public int Id { get; set; }
         public int Order { get; set; }
+        public int Type { get; set; }
         public string QuestionText { get; set; }
         public bool IsMandatory { get; set; }
 
