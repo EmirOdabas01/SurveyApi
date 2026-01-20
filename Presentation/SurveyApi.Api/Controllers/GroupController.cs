@@ -23,9 +23,9 @@ namespace SurveyApi.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetUserGroups(GetUserGroupsQueryRequest getUserGroupsQueryRequest)
+        public async Task<IActionResult> GetUserGroups()
         {
-            var response = await _mediator.Send(getUserGroupsQueryRequest);
+            var response = await _mediator.Send(new GetUserGroupsQueryRequest { });
             return Ok(response);
         }
 
