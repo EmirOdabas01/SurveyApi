@@ -23,7 +23,7 @@ namespace SurveyApi.Application.Validations.Survey
                 .WithMessage("Description length must be between 10 and 100");
 
             RuleFor(s => s.Visibility)
-                .Must(v => (int)v <= 2 && (int)v >= 0)
+                .Must(v => (int)v <= 3 && (int)v >= 1)
                 .WithMessage("Unknown visibility");
 
             RuleFor(s => s.StartDate)

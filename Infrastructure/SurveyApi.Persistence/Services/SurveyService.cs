@@ -226,8 +226,8 @@ namespace SurveyApi.Persistence.Services
 
             return new()
             {
-                Id = survey.SurveyId.ToString(),
-                Path = $"{_configuration["BaseStorageUrl"]}/{survey.ImageFile.Path}",
+                Id = survey.ImageFile.Id.ToString(),
+                Path = $"{_configuration["BaseStorageUrl"]}/{survey.ImageFile.Path}/{survey.ImageFile.FileName}",
             };
         }
 
@@ -246,7 +246,7 @@ namespace SurveyApi.Persistence.Services
               MaxResponse = s.MaxResponse,
               Visibility = s.Visibility.State,
               State = s.SurveyStatus.SurveyStatuse,
-              Path = s.ImageFile?.Path
+              Path = $"{_configuration["BaseStorageUrl"]}/{s.ImageFile?.Path}/{s.ImageFile?.FileName}",
             }).ToList();
 
             GetAllSurveyResponseDto response = new()
@@ -291,7 +291,11 @@ namespace SurveyApi.Persistence.Services
             var imageFile = await _ımageFileReadRepository.GetByIdAsync(Id);
 
             if (imageFile != null)
+                { 
                 await _ımageFileWriteRepository.RemoveAsync(Id);
+                await _ımageFileWriteRepository.SaveAsync();
+            }
+
         }
 
         public async Task UpdateSurveyAsync(UpdateSurveyDto model)

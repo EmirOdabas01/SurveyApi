@@ -25,7 +25,6 @@ using SurveyApi.Application.ViewModels.Survey;
 
 namespace SurveyApi.Api.Controllers
 {
-    // [Authorize(AuthenticationSchemes = "Admin")]
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class SurveyController : ControllerBase
@@ -95,7 +94,7 @@ namespace SurveyApi.Api.Controllers
             return Ok(result);
         }
         [HttpPut]
-        [Authorize(AuthenticationSchemes = "Admin")]
+       // [Authorize(AuthenticationSchemes = "Admin")]
         public async Task<IActionResult> UpdateSurvey([FromBody] UpdateSurveyCommandRequest updateSurveyCommandRequest)
         {
             var result = await _mediator.Send(updateSurveyCommandRequest);

@@ -20,7 +20,7 @@ namespace SurveyApi.Application.Features.Commands.Survey.CloseSurvey
         public async Task<CloseSurveyCommandResponse> Handle(CloseSurveyCommandRequest request, CancellationToken cancellationToken)
         {
             var response = await _surveyService.CloseSurveyAsync(request.SurveyId);
-            return new();
+            return new CloseSurveyCommandResponse { Success = response};
         }
     }
 }

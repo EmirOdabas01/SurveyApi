@@ -28,7 +28,7 @@ namespace SurveyApi.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RefreshTokenLogin(RefreshTokenLoginCommandRequest refreshTokenLoginCommandRequest )
+        public async Task<IActionResult> RefreshTokenLogin([FromBody] RefreshTokenLoginCommandRequest refreshTokenLoginCommandRequest )
         {
             var response = await _mediator.Send(refreshTokenLoginCommandRequest);
             return Ok(response);
