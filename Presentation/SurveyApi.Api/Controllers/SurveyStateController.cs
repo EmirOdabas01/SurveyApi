@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SurveyApi.Application.Features.Commands.Answers;
@@ -18,6 +19,7 @@ namespace SurveyApi.Api.Controllers
         }
 
         [HttpPost("{SurveyId}")]
+        [Authorize(AuthenticationSchemes = "Admin")]
         public async Task<IActionResult> StartSurvey([FromRoute] StartSurveyCommandRequest startSurveyCommandRequest)
         {
             var response = await _mediator.Send(startSurveyCommandRequest);
@@ -25,6 +27,7 @@ namespace SurveyApi.Api.Controllers
         }
 
         [HttpPost]
+
         public async Task<IActionResult> SubmitAnswers([FromBody] SubmitAnswersCommandRequest submitAnswersCommandRequest)
         {
             var response = await _mediator.Send(submitAnswersCommandRequest);

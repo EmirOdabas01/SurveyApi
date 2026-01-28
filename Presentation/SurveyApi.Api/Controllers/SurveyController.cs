@@ -94,7 +94,7 @@ namespace SurveyApi.Api.Controllers
             return Ok(result);
         }
         [HttpPut]
-       // [Authorize(AuthenticationSchemes = "Admin")]
+        [Authorize(AuthenticationSchemes = "Admin")]
         public async Task<IActionResult> UpdateSurvey([FromBody] UpdateSurveyCommandRequest updateSurveyCommandRequest)
         {
             var result = await _mediator.Send(updateSurveyCommandRequest);
@@ -150,6 +150,7 @@ namespace SurveyApi.Api.Controllers
         }
 
         [HttpGet("{SurveyId}")]
+        [Authorize(AuthenticationSchemes = "Admin")]
         public async Task<IActionResult> AnalyzeSurvey([FromRoute] AnalyzeSurveyQueryRequest analyzeSurveyQueryRequest)
         {
             var response = await _mediator.Send(analyzeSurveyQueryRequest);

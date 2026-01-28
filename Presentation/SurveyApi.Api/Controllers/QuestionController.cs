@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SurveyApi.Application.Features.Commands.Question.CreateQuestions;
@@ -21,6 +22,7 @@ namespace SurveyApi.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize(AuthenticationSchemes = "Admin")]
         public async Task<IActionResult> CreateSurveyQuestions([FromBody] CreateQuestionsCommandRequest createQuestionsCommandRequest)
         {
             var reponse = await _mediator.Send(createQuestionsCommandRequest);
@@ -35,6 +37,7 @@ namespace SurveyApi.Api.Controllers
         }
 
         [HttpPut]
+        [Authorize(AuthenticationSchemes = "Admin")]
         public async Task<IActionResult> UpdateSurveyQuestions([FromBody] UpdateQuestionsCommandRequest updateQuestionsCommandRequest)
         {
             var reponse = await _mediator.Send(updateQuestionsCommandRequest);
@@ -42,6 +45,7 @@ namespace SurveyApi.Api.Controllers
         }
 
         [HttpDelete]
+        [Authorize(AuthenticationSchemes = "Admin")]
         public async Task<IActionResult> RemoveSurveyQuestions([FromQuery] RemoveQuestionsCommandRequest removeQuestionsCommandRequest)
         {
             var response = await _mediator.Send(removeQuestionsCommandRequest);
@@ -49,6 +53,7 @@ namespace SurveyApi.Api.Controllers
         }
 
         [HttpDelete]
+        [Authorize(AuthenticationSchemes = "Admin")]
         public async Task<IActionResult> RemoveSingleQuestion([FromQuery] RemoveSingleQuestionCommandRequest removeSingleQuestionCommandRequest)
         {
             var response = await _mediator.Send(removeSingleQuestionCommandRequest);
