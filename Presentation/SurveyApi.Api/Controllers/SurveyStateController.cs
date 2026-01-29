@@ -19,7 +19,6 @@ namespace SurveyApi.Api.Controllers
         }
 
         [HttpPost("{SurveyId}")]
-        [Authorize(AuthenticationSchemes = "Admin")]
         public async Task<IActionResult> StartSurvey([FromRoute] StartSurveyCommandRequest startSurveyCommandRequest)
         {
             var response = await _mediator.Send(startSurveyCommandRequest);

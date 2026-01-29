@@ -146,7 +146,7 @@ namespace SurveyApi.Persistence.Services
                 .Where(u => u.Id != user.Id)
                 .SelectMany(u => u.Surveys)
                 .Where(s => s.VisibilityId == Convert.ToInt32(VisibilityStat.Group) &&
-                           s.SurveyStatus.SurveyStatuse == nameof(Status.Open))
+                           s.SurveyStatusId == Convert.ToInt32(Status.Open))
                 .GroupBy(s => s.SurveyId)
                 .Select(g => g.First())
                 .Select(s => new
