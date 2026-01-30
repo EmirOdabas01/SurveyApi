@@ -71,17 +71,20 @@ namespace SurveyApi.Persistence.Services
 
         public async Task<GroupListDto> GetAllGroupsAsync()
         {
-            var groups = _groupReadRepository.GetAll(false);
+            var user = await ContextUser();
+            var groupIds = user.Groups.Select(g => g.Id).ToList();
+
+            var groups = await _groupReadRepository.GetWhere(g => !groupIds.Contains(g.Id)).ToListAsync();
 
             return new GroupListDto
             {
                 Count = groups.Count(),
-                Groups = await groups.Select(g => new
+                Groups =  groups.Select(g => new
                 {
                     Id = g.Id,
                     Name = g.Name,
                     Description = g.Description,
-                }).ToListAsync()
+                })
             };
         }
 

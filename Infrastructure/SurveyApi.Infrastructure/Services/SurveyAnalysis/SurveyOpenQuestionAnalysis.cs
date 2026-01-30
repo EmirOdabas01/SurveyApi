@@ -34,9 +34,10 @@ namespace SurveyApi.Infrastructure.Services.SurveyAnalysis
                 throw new AnalysisFailException("Survey not found");
 
             List<OpenQuestionAnalysisDto> answers = new();
-            foreach(var question in survey.Questions)
+
+            foreach (var question in survey.Questions)
             {
-                if(question.QuestionTypeId == (int)QuestType.Open && question.Answers != null)
+                if (question.QuestionTypeId == (int)QuestType.Open && question.Answers != null && question.Answers.Any())
                 {
                     answers.Add(new OpenQuestionAnalysisDto
                     {

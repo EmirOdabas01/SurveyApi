@@ -221,7 +221,7 @@ namespace SurveyApi.Persistence.Services
         {
             var survey = await _surveyReadRepository.Table.Include(s => s.ImageFile).FirstOrDefaultAsync(p => p.SurveyId == Guid.Parse(SurveyId));
 
-            if (survey == null)
+            if (survey == null || survey.ImageFile == null)
                 throw new Exception();
 
             return new()
@@ -339,12 +339,15 @@ namespace SurveyApi.Persistence.Services
 
         public async Task<bool> PublishSurveyAsync(string Id)
         {
-            var survey = await _surveyReadRepository.GetByIdAsync(Id);
+            var survey = await _surveyReadRepository.GetWhere(s => s.SurveyId == Guid.Parse(Id)).Include(s => s.Questions)
+                .FirstOrDefaultAsync();
 
             if (survey == null)
                 throw new SurveyNotFoundException();
+            else if (survey.Questions.Count == 0)
+                throw new QuestionsNotFoundException("Surveys without questions can not be published"); 
 
-            survey.SurveyStatusId = (int)Status.Open;
+                survey.SurveyStatusId = (int)Status.Open;
             survey.StartDate = DateTime.UtcNow;
             int success = await _surveyWriteRepository.SaveAsync();
 

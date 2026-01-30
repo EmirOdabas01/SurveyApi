@@ -19,14 +19,14 @@ namespace SurveyApi.Infrastructure.Services.SurveyAnalysis
     public class SurveyQuestionAnalysisService : ISurveyQuestionAnalysisService
     {
         private readonly ISurveyReadRepository _surveyReadRepository;
+
         public SurveyQuestionAnalysisService(ISurveyReadRepository surveyReadRepository)
         {
             _surveyReadRepository = surveyReadRepository;
         }
-        
+
         public async Task<QuestionAnalysisDto> AnalyzeSurvey(string SurveyId)
         {
-
             var survey = await _surveyReadRepository
                 .GetWhere(s => s.SurveyId == Guid.Parse(SurveyId))
                 .Include(s => s.Questions)
@@ -40,7 +40,6 @@ namespace SurveyApi.Infrastructure.Services.SurveyAnalysis
                 throw new AnalysisFailException("Survey not Found");
             else if (survey.SurveyStatusId != (int)Status.Closed)
                 throw new AnalysisFailException("Survey must be closed to get analyzed");
-               
 
             var optionQuestions = survey.Questions.Where(q => q.QuestionTypeId != (int)QuestType.Open).ToList();
 
@@ -48,7 +47,8 @@ namespace SurveyApi.Infrastructure.Services.SurveyAnalysis
                 throw new AnalysisFailException("Unfinished survey can not be analyzed");
 
             QuestionAnalysisDto questionAnalysis = new();
-            foreach(var question in optionQuestions)
+
+            foreach (var question in optionQuestions)
             {
                 int totalAnswerCount = question.QuestionOptions.Sum(qo => qo.AnswerOptions?.Count ?? 0);
 
@@ -58,20 +58,31 @@ namespace SurveyApi.Infrastructure.Services.SurveyAnalysis
                     Order = question.Order
                 };
 
-                foreach(var option in question.QuestionOptions)
+                foreach (var option in question.QuestionOptions)
                 {
+                    int optionAnswerCount = option.AnswerOptions?.Count ?? 0;
+
+                    double ratio = totalAnswerCount > 0
+                        ? (double)optionAnswerCount * 100 / totalAnswerCount
+                        : 0;
+
                     OptionAnalysisInfoDto optionAnalysisInfo = new()
                     {
                         OptionText = option.Value,
                         Order = option.Order,
-                        Ratio = (double)(option.AnswerOptions?.Count ?? 0) * 100 / totalAnswerCount
+                        Ratio = ratio
                     };
                     singleQuestionAnalysis.OptionAnalysisInfo.Add(optionAnalysisInfo);
                 }
-
                 questionAnalysis.SingleQuestionAnalysis.Add(singleQuestionAnalysis);
             }
-            questionAnalysis.UnsolvedRatio = (double)optionQuestions.Count(q => q.Answers == null) * 100/ optionQuestions.Count;
+
+            int optionQuestionsCount = optionQuestions.Count;
+            int unsolvedCount = optionQuestions.Count(q => q.Answers == null || q.Answers.Count == 0);
+
+            questionAnalysis.UnsolvedRatio = optionQuestionsCount > 0
+                ? (double)unsolvedCount * 100 / optionQuestionsCount
+                : 0;
 
             return questionAnalysis;
         }

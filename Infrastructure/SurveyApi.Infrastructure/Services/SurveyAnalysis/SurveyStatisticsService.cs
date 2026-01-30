@@ -13,7 +13,6 @@ namespace SurveyApi.Infrastructure.Services.SurveyAnalysis
 {
     public class SurveyStatisticsService : ISurveyStatisticsService
     {
-       
         private readonly IResponseReadRepository _responseReadRepository;
 
         public SurveyStatisticsService(IResponseReadRepository responseReadRepository)
@@ -25,26 +24,33 @@ namespace SurveyApi.Infrastructure.Services.SurveyAnalysis
         {
             var responses = await _responseReadRepository
                 .GetWhere(r => r.SurveyId == Guid.Parse(SurveyId)).ToListAsync();
-              
-            if (responses == null)
+
+            if (responses == null || responses.Count == 0)
                 throw new AnalysisFailException("There is no response yet");
 
             int totalResponse = responses.Count;
             int finishedCount = responses.Count(r => r.EndDate != null);
-
             TimeSpan totalTime = TimeSpan.Zero;
-            foreach(var data in responses)
+
+            foreach (var data in responses)
             {
-                if(data.EndDate != null)
+                if (data.EndDate != null)
                     totalTime += data.EndDate.Value - data.BeginDate;
             }
-             
+
+            TimeSpan avgDuration = finishedCount > 0
+                ? totalTime / finishedCount
+                : TimeSpan.Zero;
+
+            double completionRatio = totalResponse > 0
+                ? (double)finishedCount * 100 / totalResponse
+                : 0;
 
             return new StatisticAnalysisDto
             {
                 TotalResponse = totalResponse,
-                AvgDuration = totalTime / finishedCount,
-                CompletionRatio = (double)finishedCount * 100 / totalResponse
+                AvgDuration = avgDuration,
+                CompletionRatio = completionRatio
             };
         }
     }
