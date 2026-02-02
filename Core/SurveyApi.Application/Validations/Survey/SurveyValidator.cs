@@ -28,8 +28,8 @@ namespace SurveyApi.Application.Validations.Survey
 
             RuleFor(s => s.StartDate)
                 .NotEmpty().WithMessage("Date cannot be empty")
-                .Must(d => d >= DateTime.UtcNow)
-                .WithMessage("The start date cannot be earlier than now");
+                .Must(d => d >= DateTime.UtcNow.AddMinutes(5))
+                .WithMessage("Start date must be at least 5 minutes from now");
 
             RuleFor(s => s.EndDate)
                 .NotEmpty().WithMessage("Date cannot be empty")
