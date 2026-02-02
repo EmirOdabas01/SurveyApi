@@ -19,6 +19,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentatio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SurveyApi.Api", "Presentation\SurveyApi.Api\SurveyApi.Api.csproj", "{A53DEC46-630F-4314-B28B-65EC449E32D3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackgroundJob", "Infrastructure\BackgroundJob\BackgroundJob.csproj", "{1E1BB376-4B22-4934-A037-AB71CE868D31}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{A53DEC46-630F-4314-B28B-65EC449E32D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A53DEC46-630F-4314-B28B-65EC449E32D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A53DEC46-630F-4314-B28B-65EC449E32D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E1BB376-4B22-4934-A037-AB71CE868D31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E1BB376-4B22-4934-A037-AB71CE868D31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E1BB376-4B22-4934-A037-AB71CE868D31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E1BB376-4B22-4934-A037-AB71CE868D31}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,6 +61,7 @@ Global
 		{B247279F-B1B1-416C-9548-7CA643C12ABD} = {5D4A784B-1222-4E58-BB1F-62363A3C47A3}
 		{30D40AA3-6D66-4FA7-B165-8669B255792F} = {5D4A784B-1222-4E58-BB1F-62363A3C47A3}
 		{A53DEC46-630F-4314-B28B-65EC449E32D3} = {CA569042-91E3-4173-AB60-F86EF3B43847}
+		{1E1BB376-4B22-4934-A037-AB71CE868D31} = {5D4A784B-1222-4E58-BB1F-62363A3C47A3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {68C3380D-C71E-4FA5-8187-81D920D40DDA}

@@ -1,4 +1,4 @@
-using BackgroundJobs;
+using BackgroundJob;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
